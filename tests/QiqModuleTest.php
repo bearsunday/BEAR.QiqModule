@@ -13,7 +13,7 @@ class QiqModuleTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->qiqModule = new QiqModule();
+        $this->qiqModule = new QiqModule('');
     }
 
     public function testIsInstanceOfQiqModule(): void
