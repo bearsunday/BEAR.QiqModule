@@ -1,13 +1,21 @@
-# b-e-a-r/qiq-module
+# BEAR.QiqModule
+
+[QiQ template](https://qiqphp.com/) for BEAR.Sunday
 
 ## Installation
 
-    composer install
+### Composer install
 
-## Available Commands
+    composer require bear/qiq-module
 
-    composer test              // Run unit test
-    composer tests             // Test and quality checks
-    composer cs-fix            // Fix the coding style
-    composer sa                // Run static analysys tools
-    composer run-script --list // List all commands
+### Module install
+
+```php
+
+use BEAR\QiqModule\QiqModule;
+
+protected function configure(): void
+{
+    $this->install(new QiqModule($templateDir);
+}
+```
