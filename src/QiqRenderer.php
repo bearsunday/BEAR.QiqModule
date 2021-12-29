@@ -15,16 +15,12 @@ use function is_array;
 
 final class QiqRenderer implements RenderInterface
 {
-    /** @var string */
-    private $templateDir;
-
     /**
      * @Named("qiq_template_dir")
      */
     #Named['qiq_template_dir']
-    public function __construct(string $templateDir)
+    public function __construct(private string $templateDir)
     {
-        $this->templateDir = $templateDir;
     }
 
     public function render(ResourceObject $ro): string

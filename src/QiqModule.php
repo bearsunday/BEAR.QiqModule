@@ -10,13 +10,9 @@ use Ray\Di\Scope;
 
 final class QiqModule extends AbstractModule
 {
-    /** @var string */
-    private $templateDir;
-
-    public function __construct(string $templateDir, ?AbstractModule $module = null)
+    public function __construct(private string $templateDir, private ?AbstractModule $module = null)
     {
-        $this->templateDir = $templateDir;
-        parent::__construct($module);
+        parent::__construct($this->module);
     }
 
     protected function configure(): void
