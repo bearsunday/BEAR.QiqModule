@@ -13,9 +13,11 @@
 ```php
 
 use BEAR\QiqModule\QiqModule;
+use BEAR\QiqModule\QiqProdModule;
 
 protected function configure(): void
 {
     $this->install(new QiqModule($templateDir);
+    $this->install(new QiqProdModule($cachePath); // in production
 }
 ```
