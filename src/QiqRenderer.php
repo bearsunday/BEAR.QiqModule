@@ -15,18 +15,16 @@ use function is_array;
 
 final class QiqRenderer implements RenderInterface
 {
-    /**
-     * @Named("qiq_template_dir")
-     */
-    #Named['qiq_template_dir']
-    public function __construct(private string $templateDir)
-    {
+    public function __construct(
+        #[Named('qiq_template_dir')] private string $templateDir,
+        #[Named('qiq_cache_path')] private ?string $cachePath = null
+    ) {
     }
 
     public function render(ResourceObject $ro): string
     {
         $class = new ReflectionClass($ro);
-        $tpl = Template::new($this->templateDir);
+        $tpl = Template::new(paths: $this->templateDir, cachePath: $this->cachePath);
         $name = $class->getShortName();
         $tpl->setView($name);
         assert(is_array($ro->body));
