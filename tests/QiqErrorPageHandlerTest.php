@@ -21,10 +21,12 @@ class QiqErrorPageHandlerTest extends TestCase
     protected function setUp(): void
     {
         $qiqTemplateDir = dirname(__DIR__) . '/tests/Fake/templates';
-        $this->qiqModule = new QiqModule($qiqTemplateDir);
+        $qiqErrorViewName = 'Error';
+
+        $this->qiqModule = new QiqModule($qiqTemplateDir, $qiqErrorViewName);
 
         $errorPage = new QiqErrorPage();
-        $errorPage->setRenderer(new QiqErrorPageRenderer());
+        $errorPage->setRenderer(new QiqErrorPageRenderer($qiqTemplateDir, $qiqErrorViewName));
 
         $this->handler = new QiqErrorHandler(
             $errorPage,
@@ -61,6 +63,6 @@ class QiqErrorPageHandlerTest extends TestCase
 
         $this->assertSame(503, FakeHttpResponder::$code);
         $this->assertSame('text/html; charset=utf-8', FakeHttpResponder::$headers['content-type']);
-        $this->assertSame('code: 503 message: Service Unavailable', FakeHttpResponder::$content);
+        $this->assertStringStartsWith('custom error page code: 503 message: Service Unavailable', FakeHttpResponder::$content);
     }
 }
