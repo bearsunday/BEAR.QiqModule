@@ -11,7 +11,7 @@ use Ray\Di\Di\Named;
 
 class QiqErrorPage extends ResourceObject
 {
-    /** @var string[]  */
+    /** @var array<string, string>  */
     public $headers = ['content-type' => 'text/html; charset=utf-8'];
 
     /** @var RenderInterface */
