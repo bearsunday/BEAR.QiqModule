@@ -23,10 +23,6 @@ class QiqErrorPage extends ResourceObject
         return ['renderer'];
     }
 
-    /**
-     * @Inject
-     * @Named("error_page")
-     */
     #[Inject, Named('error_page')]
     public function setRenderer(RenderInterface $renderer): ResourceObject
     {
