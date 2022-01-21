@@ -10,8 +10,11 @@ use Ray\Di\Scope;
 
 final class QiqModule extends AbstractModule
 {
-    public function __construct(private string $templateDir, private ?AbstractModule $module = null)
-    {
+    public function __construct(
+        private string $templateDir,
+        private ?string $errorViewName = null,
+        private ?AbstractModule $module = null
+    ) {
         parent::__construct($this->module);
     }
 
@@ -19,5 +22,7 @@ final class QiqModule extends AbstractModule
     {
         $this->bind()->annotatedWith('qiq_template_dir')->toInstance($this->templateDir);
         $this->bind(RenderInterface::class)->to(QiqRenderer::class)->in(Scope::SINGLETON);
+
+        $this->install(new QiqErrorModule($this->errorViewName));
     }
 }
