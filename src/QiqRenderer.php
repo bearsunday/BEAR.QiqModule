@@ -17,7 +17,8 @@ final class QiqRenderer implements RenderInterface
 {
     public function __construct(
         #[Named('qiq_template_dir')] private string $templateDir,
-        #[Named('qiq_cache_path')] private ?string $cachePath = null
+        #[Named('qiq_cache_path')] private ?string $cachePath = null,
+        #[Named('qiq_layout')] private ?string $layout = null,
     ) {
     }
 
@@ -27,6 +28,7 @@ final class QiqRenderer implements RenderInterface
         $tpl = Template::new(paths: $this->templateDir, cachePath: $this->cachePath);
         $name = $class->getShortName();
         $tpl->setView($name);
+        $tpl->setLayout($this->layout);
         assert(is_array($ro->body));
         $tpl->setData($ro->body);
 

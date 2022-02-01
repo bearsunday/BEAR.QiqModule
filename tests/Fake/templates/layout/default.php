@@ -1,0 +1,1 @@
+before -- {{= getContent() }} -- after

@@ -11,6 +11,8 @@ use Ray\Di\Injector;
 use function assert;
 use function dirname;
 
+use const PHP_EOL;
+
 class QiqRendererTest extends TestCase
 {
     private AbstractModule $module;
@@ -42,5 +44,13 @@ class QiqRendererTest extends TestCase
         $view = (string) $ro;
         $this->assertSame('Hello, World. That was Qiq! And this is PHP, World.
 ', $view);
+    }
+
+    public function testLayoutRender(): void
+    {
+        $this->module->install(new QiqLayoutModule());
+        $ro = (new Injector($this->module))->getInstance(FakeRo::class);
+        assert($ro instanceof FakeRo);
+        $this->assertSame('before -- Hello, World. That was Qiq! And this is PHP, World.' . PHP_EOL . ' -- after' . PHP_EOL, (string) $ro->onGet(['name' => 'World']));
     }
 }

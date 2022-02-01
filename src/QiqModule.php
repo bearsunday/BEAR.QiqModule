@@ -22,7 +22,6 @@ final class QiqModule extends AbstractModule
     {
         $this->bind()->annotatedWith('qiq_template_dir')->toInstance($this->templateDir);
         $this->bind(RenderInterface::class)->to(QiqRenderer::class)->in(Scope::SINGLETON);
-
         $this->install(new QiqErrorModule($this->errorViewName));
     }
 }
