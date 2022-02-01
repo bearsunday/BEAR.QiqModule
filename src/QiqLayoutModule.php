@@ -8,7 +8,7 @@ use Ray\Di\AbstractModule;
 
 final class QiqLayoutModule extends AbstractModule
 {
-    public const DEFAULT_LAYOUT = 'default';
+    public const DEFAULT_LAYOUT = '/layout/default';
 
     public function __construct(
         private string $layout = self::DEFAULT_LAYOUT,
@@ -19,6 +19,6 @@ final class QiqLayoutModule extends AbstractModule
 
     protected function configure(): void
     {
-        $this->bind()->annotatedWith('qiq_layout')->toInstance('/layout/' . $this->layout);
+        $this->bind()->annotatedWith('qiq_layout')->toInstance($this->layout);
     }
 }
