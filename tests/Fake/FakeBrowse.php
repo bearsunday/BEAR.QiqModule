@@ -6,7 +6,7 @@ namespace BEAR\QiqModule;
 
 use BEAR\Resource\ResourceObject;
 
-#[Layout('/layout/custom')]
+#[Layout('/layout/default')]
 final class FakeBrowse extends ResourceObject
 {
     /**

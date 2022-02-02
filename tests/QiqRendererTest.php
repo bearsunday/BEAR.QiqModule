@@ -50,6 +50,6 @@ class QiqRendererTest extends TestCase
     {
         $ro = (new Injector($this->module))->getInstance(FakeBrowse::class);
         assert($ro instanceof FakeBrowse);
-        $this->assertSame('custom before -- Hello, World. That was Qiq! And this is PHP, World.' . PHP_EOL . ' -- custom after' . PHP_EOL, (string) $ro->onGet(['name' => 'World']));
+        $this->assertSame('before -- Hello, World. That was Qiq! And this is PHP, World.' . PHP_EOL . ' -- after' . PHP_EOL, (string) $ro->onGet(['name' => 'World']));
     }
 }
