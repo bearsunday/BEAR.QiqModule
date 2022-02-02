@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace BEAR\QiqModule;
 
 use BEAR\Resource\RenderInterface;
+use Doctrine\Common\Annotations\Reader;
+use Koriym\Attributes\AttributeReader;
 use Ray\Di\AbstractModule;
 use Ray\Di\Scope;
 
@@ -20,6 +22,7 @@ final class QiqModule extends AbstractModule
 
     protected function configure(): void
     {
+        $this->bind(Reader::class)->to(AttributeReader::class);
         $this->bind()->annotatedWith('qiq_template_dir')->toInstance($this->templateDir);
         $this->bind(RenderInterface::class)->to(QiqRenderer::class)->in(Scope::SINGLETON);
         $this->install(new QiqErrorModule($this->errorViewName));
