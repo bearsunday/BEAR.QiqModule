@@ -48,15 +48,6 @@ class QiqRendererTest extends TestCase
 
     public function testLayoutRender(): void
     {
-        $this->module->install(new QiqLayoutModule());
-        $ro = (new Injector($this->module))->getInstance(FakeRo::class);
-        assert($ro instanceof FakeRo);
-        $this->assertSame('before -- Hello, World. That was Qiq! And this is PHP, World.' . PHP_EOL . ' -- after' . PHP_EOL, (string) $ro->onGet(['name' => 'World']));
-    }
-
-    public function testOverrideLayoutRender(): void
-    {
-        $this->module->install(new QiqLayoutModule());
         $ro = (new Injector($this->module))->getInstance(FakeBrowse::class);
         assert($ro instanceof FakeBrowse);
         $this->assertSame('custom before -- Hello, World. That was Qiq! And this is PHP, World.' . PHP_EOL . ' -- custom after' . PHP_EOL, (string) $ro->onGet(['name' => 'World']));

@@ -15,7 +15,7 @@ final class QiqModule extends AbstractModule
     public function __construct(
         private string $templateDir,
         private ?string $errorViewName = null,
-        private ?AbstractModule $module = null
+        private ?AbstractModule $module = null,
     ) {
         parent::__construct($this->module);
     }

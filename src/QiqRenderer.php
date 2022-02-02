@@ -20,7 +20,6 @@ final class QiqRenderer implements RenderInterface
         public Reader $reader,
         #[Named('qiq_template_dir')] private string $templateDir,
         #[Named('qiq_cache_path')] private ?string $cachePath = null,
-        #[Named('qiq_layout')] private ?string $layout = null,
     ) {
     }
 
@@ -31,7 +30,10 @@ final class QiqRenderer implements RenderInterface
         $name = $class->getShortName();
         $tpl->setView($name);
         $layout = $this->reader->getClassAnnotation($class, Layout::class);
-        $tpl->setLayout($layout->value ?? $this->layout);
+        if ($layout) {
+            $tpl->setLayout($layout->value);
+        }
+
         assert(is_array($ro->body));
         $tpl->setData($ro->body);
 
