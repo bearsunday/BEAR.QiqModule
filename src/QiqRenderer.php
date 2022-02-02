@@ -30,7 +30,7 @@ final class QiqRenderer implements RenderInterface
         $tpl = Template::new(paths: $this->templateDir, cachePath: $this->cachePath);
         $name = $class->getShortName();
         $tpl->setView($name);
-        $layout = $this->reader->getMethodAnnotation($class->getMethod('onGet'), Layout::class);
+        $layout = $this->reader->getClassAnnotation($class, Layout::class);
         $tpl->setLayout($layout->value ?? $this->layout);
         assert(is_array($ro->body));
         $tpl->setData($ro->body);

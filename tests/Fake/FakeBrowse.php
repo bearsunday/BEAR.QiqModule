@@ -6,12 +6,12 @@ namespace BEAR\QiqModule;
 
 use BEAR\Resource\ResourceObject;
 
+#[Layout('/layout/custom')]
 final class FakeBrowse extends ResourceObject
 {
     /**
      * @param array<string, int|string> $data
      */
-    #[Layout('/layout/custom')]
     public function onGet(array $data): ResourceObject
     {
         $this->body = $data;
