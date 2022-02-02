@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BEAR\QiqModule;
 
-use BEAR\QiqModule\Annotation\Layout;
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\ResourceObject;
 use Doctrine\Common\Annotations\Reader;

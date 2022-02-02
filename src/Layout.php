@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BEAR\QiqModule\Annotation;
+namespace BEAR\QiqModule;
 
 use Attribute;
 
