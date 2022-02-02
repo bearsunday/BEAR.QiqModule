@@ -14,10 +14,10 @@ class QiqErrorPage extends ResourceObject
     /** @var array<string, string>  */
     public $headers = ['content-type' => 'text/html; charset=utf-8'];
 
-    /** @var RenderInterface */
+    /** @var RenderInterface|null */
     protected $renderer;
 
-    /** @return string[] */
+    /** @return list<string> */
     public function __sleep(): array
     {
         return ['renderer'];

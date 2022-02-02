@@ -25,7 +25,9 @@ class QiqErrorPageRenderer implements RenderInterface
         $tpl = Template::new($this->templateDir);
         $tpl->setView($this->errorViewName);
         assert(is_array($ro->body));
-        $tpl->setData($ro->body['status']);
+        $status = $ro->body['status'];
+        assert(is_array($status));
+        $tpl->setData($status);
         $ro->view = $tpl();
 
         return $ro->view;
