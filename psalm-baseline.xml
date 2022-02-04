@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="4.19.0@a2ad69ae4f5ab1f7d225a8dc4e2ec2d9415ed599">
+  <file src="src/QiqErrorPageRenderer.php">
+    <InvalidAttribute occurrences="2">
+      <code>Named</code>
+      <code>Named</code>
+    </InvalidAttribute>
+  </file>
+  <file src="src/QiqRenderer.php">
+    <InvalidAttribute occurrences="2">
+      <code>Named</code>
+      <code>Named</code>
+    </InvalidAttribute>
+  </file>
+</files>
