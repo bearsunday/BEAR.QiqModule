@@ -66,7 +66,7 @@ final class QiqErrorHandler implements ErrorInterface
     private function getCode(Throwable $e): int
     {
         if ($e instanceof NotFound || $e instanceof BadRequest) {
-            return $e->getCode();
+            return (int) $e->getCode();
         }
 
         return 503;
