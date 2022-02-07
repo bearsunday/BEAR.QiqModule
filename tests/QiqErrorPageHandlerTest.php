@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace BEAR\QiqModule;
 
+use BEAR\Resource\Exception\ResourceNotFoundException as NotFound;
 use BEAR\Resource\Exception\ServerErrorException as ServerError;
 use BEAR\Sunday\Extension\Error\ErrorInterface;
 use BEAR\Sunday\Extension\Router\RouterMatch;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use Ray\Di\Exception\NotFound;
 
 use function dirname;
+use function serialize;
+use function unserialize;
 
 class QiqErrorPageHandlerTest extends TestCase
 {
@@ -68,7 +70,7 @@ class QiqErrorPageHandlerTest extends TestCase
 
     public function testSleep(): void
     {
-        $erroPage = unserialize(serialize(new QiqErrorPage));
-        $this->assertInstanceOf(QiqErrorPage::class, $erroPage);
+        $errorPage = unserialize(serialize(new QiqErrorPage()));
+        $this->assertInstanceOf(QiqErrorPage::class, $errorPage);
     }
 }
