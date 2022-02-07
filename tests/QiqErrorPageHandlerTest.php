@@ -12,6 +12,8 @@ use Psr\Log\NullLogger;
 use Ray\Di\Exception\NotFound;
 
 use function dirname;
+use function serialize;
+use function unserialize;
 
 class QiqErrorPageHandlerTest extends TestCase
 {
@@ -64,5 +66,11 @@ class QiqErrorPageHandlerTest extends TestCase
         $this->assertSame(503, FakeHttpResponder::$code);
         $this->assertSame('text/html; charset=utf-8', FakeHttpResponder::$headers['content-type']);
         $this->assertStringStartsWith('code: 503 message: Service Unavailable', FakeHttpResponder::$content);
+    }
+
+    public function testSleep(): void
+    {
+        $errorPage = unserialize(serialize(new QiqErrorPage()));
+        $this->assertInstanceOf(QiqErrorPage::class, $errorPage);
     }
 }
