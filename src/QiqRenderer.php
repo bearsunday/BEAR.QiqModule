@@ -6,7 +6,7 @@ namespace BEAR\QiqModule;
 
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\ResourceObject;
-use Qiq\Template;
+use Qiq\TemplateCore;
 use Ray\Di\Di\Named;
 use ReflectionClass;
 
@@ -16,15 +16,16 @@ use function is_array;
 final class QiqRenderer implements RenderInterface
 {
     public function __construct(
+        private TemplateCore $template,
         #[Named('qiq_template_dir')] private string $templateDir,
-        #[Named('qiq_cache_path')] private ?string $cachePath = null
+        #[Named('qiq_cache_path')] private ?string $cachePath = null,
     ) {
     }
 
     public function render(ResourceObject $ro): string
     {
         $class = new ReflectionClass($ro);
-        $tpl = Template::new(paths: $this->templateDir, cachePath: $this->cachePath);
+        $tpl = $this->template;
         $name = $class->getShortName();
         $tpl->setView($name);
         assert(is_array($ro->body));

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\QiqModule;
 
+use BEAR\Resource\RenderInterface;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
@@ -20,6 +21,12 @@ class QiqRendererTest extends TestCase
         $qiqTemplateDir = dirname(__DIR__) . '/tests/Fake/templates';
         $this->module = new QiqModule($qiqTemplateDir);
         parent::setUp();
+    }
+
+    public function testRenderModule(): void
+    {
+        $render = (new Injector($this->module))->getInstance(RenderInterface::class);
+        $this->assertInstanceOf(QiqRenderer::class, $render);
     }
 
     public function testRender(): void

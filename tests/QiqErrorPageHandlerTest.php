@@ -63,6 +63,6 @@ class QiqErrorPageHandlerTest extends TestCase
 
         $this->assertSame(503, FakeHttpResponder::$code);
         $this->assertSame('text/html; charset=utf-8', FakeHttpResponder::$headers['content-type']);
-        $this->assertStringStartsWith('custom error page code: 503 message: Service Unavailable', FakeHttpResponder::$content);
+        $this->assertStringStartsWith('code: 503 message: Service Unavailable', FakeHttpResponder::$content);
     }
 }
