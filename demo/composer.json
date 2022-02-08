@@ -22,7 +22,8 @@
     },
     "autoload": {
         "psr-4": {
-            "MyVendor\\MyProject\\": "src/"
+            "MyVendor\\MyProject\\": "src/",
+            "Qiq\\Helper\\": "var/qiq/helper/"
         }
     },
     "autoload-dev": {
