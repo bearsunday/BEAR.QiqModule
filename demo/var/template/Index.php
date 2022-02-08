@@ -1,0 +1,1 @@
+Greeting: {{h $this->greeting }}
