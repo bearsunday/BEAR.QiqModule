@@ -1,2 +1,2 @@
 {{ setLayout('layout/base') }}
-Greeting: {{h foo($this->greeting) }}
+Greeting: {{h $this->bar($this->foo($this->greeting)) }}
