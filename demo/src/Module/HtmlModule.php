@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyVendor\MyProject\Module;
 
-use BEAR\Dotenv\Dotenv;
 use BEAR\Package\AbstractAppModule;
 
 use BEAR\QiqModule\QiqModule;
