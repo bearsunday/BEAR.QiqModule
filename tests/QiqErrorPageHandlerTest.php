@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace BEAR\QiqModule;
 
+use BEAR\Resource\Exception\ResourceNotFoundException as NotFound;
 use BEAR\Resource\Exception\ServerErrorException as ServerError;
 use BEAR\Sunday\Extension\Error\ErrorInterface;
 use BEAR\Sunday\Extension\Router\RouterMatch;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use Ray\Di\Exception\NotFound;
 
 use function dirname;
+use function serialize;
+use function unserialize;
 
 class QiqErrorPageHandlerTest extends TestCase
 {
@@ -64,5 +66,11 @@ class QiqErrorPageHandlerTest extends TestCase
         $this->assertSame(503, FakeHttpResponder::$code);
         $this->assertSame('text/html; charset=utf-8', FakeHttpResponder::$headers['content-type']);
         $this->assertStringStartsWith('code: 503 message: Service Unavailable', FakeHttpResponder::$content);
+    }
+
+    public function testSleep(): void
+    {
+        $errorPage = unserialize(serialize(new QiqErrorPage()));
+        $this->assertInstanceOf(QiqErrorPage::class, $errorPage);
     }
 }
