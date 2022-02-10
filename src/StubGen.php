@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BEAR\QiqModule;
 
-use BEAR\ApiDoc\Ref;
 use FilesystemIterator;
 use Iterator;
 use Qiq\Helper\Helper;
@@ -14,10 +13,11 @@ use ReflectionMethod;
 use SplFileInfo;
 use SplHeap;
 
+use function assert;
+use function class_exists;
 use function file_get_contents;
 use function file_put_contents;
 use function implode;
-use function join;
 use function lcfirst;
 use function sprintf;
 use function str_replace;
@@ -40,7 +40,7 @@ final class StubGen
             $paramSigs[] = sprintf('%s $%s', (string) $param->getType(), $param->getName());
         }
 
-        $paramSig = join(', ', $paramSigs);
+        $paramSig = implode(', ', $paramSigs);
 
         return sprintf('%s %s(%s)', $returnType, lcfirst($class->getShortName()), $paramSig);
     }
@@ -64,6 +64,7 @@ final class StubGen
             {
                 assert($a instanceof SplFileInfo);
                 assert($b instanceof SplFileInfo);
+
                 return strcmp((string) $a->getRealpath(), (string) $b->getRealpath());
             }
         };

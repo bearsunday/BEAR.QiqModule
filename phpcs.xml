@@ -19,6 +19,7 @@
     <file>tests</file>
     <exclude-pattern>*/tmp/*</exclude-pattern>
     <exclude-pattern>*/Fake/*</exclude-pattern>
+    <exclude-pattern>*/src/HelperLocator.php</exclude-pattern>
 
     <!-- PSR12 Coding Standard -->
     <rule ref="PSR12"/>
