@@ -28,6 +28,9 @@
             "BEAR\\QiqModule\\": [
                 "tests",
                 "tests/Fake"
+            ],
+            "Qiq\\Helper\\": [
+                "tests/Fake/helper"
             ]
         }
     },
