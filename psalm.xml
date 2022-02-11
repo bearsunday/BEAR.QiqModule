@@ -11,6 +11,7 @@
         <directory name="src" />
         <ignoreFiles>
             <directory name="vendor" />
+            <file name="src/HelperLocator.php" />
         </ignoreFiles>
     </projectFiles>
 </psalm>

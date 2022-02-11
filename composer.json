@@ -28,9 +28,13 @@
             "BEAR\\QiqModule\\": [
                 "tests",
                 "tests/Fake"
+            ],
+            "Qiq\\Helper\\": [
+                "tests/Fake/helper"
             ]
         }
     },
+    "bin": ["bin/qiq_stubgen.php"],
     "scripts": {
         "setup": "php bin/setup.php",
         "test": "./vendor/bin/phpunit",
