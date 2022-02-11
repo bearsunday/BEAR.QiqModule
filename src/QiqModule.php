@@ -18,7 +18,6 @@ final class QiqModule extends AbstractModule
 {
     public function __construct(
         private string $templateDir,
-        private ?string $errorViewName = null,
         private ?AbstractModule $module = null
     ) {
         parent::__construct($this->module);
@@ -37,6 +36,5 @@ final class QiqModule extends AbstractModule
         $this->bind(RenderInterface::class)->to(QiqRenderer::class)->in(Scope::SINGLETON);
         $this->bind(HelperLocator::class)->toProvider(HelperLocatorProvider::class);
         $this->bind(Compiler::class)->to(QiqCompiler::class);
-        $this->install(new QiqErrorModule($this->errorViewName));
     }
 }
