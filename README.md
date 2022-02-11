@@ -1,23 +1,8 @@
 # BEAR.QiqModule
 
-[QiQ template](https://qiqphp.com/) for BEAR.Sunday
+[QiQ template](https://qiqphp-ja.github.io/) for BEAR.Sunday
 
-## Installation
+## Documentation
 
-### Composer install
-
-    composer require bear/qiq-module
-
-### Module install
-
-```php
-
-use BEAR\QiqModule\QiqModule;
-use BEAR\QiqModule\QiqProdModule;
-
-protected function configure(): void
-{
-    $this->install(new QiqModule($templateDir);
-    $this->install(new QiqProdModule($cachePath); // in production
-}
-```
+* [English](http://bearsunday.github.io/manuals/1.0/en/html-qiq.html)
+* [Japanese](http://bearsunday.github.io/manuals/1.0/ja/html-qiq.html)
