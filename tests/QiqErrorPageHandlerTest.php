@@ -17,7 +17,7 @@ use function unserialize;
 
 class QiqErrorPageHandlerTest extends TestCase
 {
-    protected QiqModule $qiqModule;
+    protected QiqErrorModule $qiqErrorModule;
     private QiqErrorHandler $handler;
 
     protected function setUp(): void
@@ -25,7 +25,7 @@ class QiqErrorPageHandlerTest extends TestCase
         $qiqTemplateDir = dirname(__DIR__) . '/tests/Fake/templates';
         $qiqErrorViewName = 'Error';
 
-        $this->qiqModule = new QiqModule($qiqTemplateDir, $qiqErrorViewName);
+        $this->qiqErrorModule = new QiqErrorModule($qiqErrorViewName);
 
         $errorPage = new QiqErrorPage();
         $errorPage->setRenderer(new QiqErrorPageRenderer($qiqTemplateDir, $qiqErrorViewName));
