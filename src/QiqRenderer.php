@@ -12,6 +12,10 @@ use ReflectionClass;
 
 use function assert;
 use function is_array;
+use function is_string;
+use function str_replace;
+use function strpos;
+use function substr;
 
 final class QiqRenderer implements RenderInterface
 {
@@ -23,9 +27,11 @@ final class QiqRenderer implements RenderInterface
     public function render(ResourceObject $ro): string
     {
         $class = $this->getReflection($ro);
-        $name = $class->getShortName();
+        $fileName = $class->getFileName();
+        assert(is_string($fileName));
+        $path = $this->getTemplatePath($fileName);
         $tpl = $this->template;
-        $tpl->setView($name);
+        $tpl->setView($path);
         assert(is_array($ro->body));
         $tpl->setData($ro->body);
 
@@ -43,5 +49,13 @@ final class QiqRenderer implements RenderInterface
         }
 
         return new ReflectionClass($ro);
+    }
+
+    private function getTemplatePath(string $resourceFilePath): string
+    {
+        $pos = strpos($resourceFilePath, '/Resource/');
+        $relativePath = substr($resourceFilePath, (int) $pos + 10);
+
+        return str_replace('.php', '', $relativePath);
     }
 }
