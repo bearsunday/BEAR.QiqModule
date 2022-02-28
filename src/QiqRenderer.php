@@ -38,7 +38,7 @@ final class QiqRenderer implements RenderInterface
         return $tpl();
     }
 
-    /** @return ReflectionClass<ResourceObject>|ReflectionClass<object> */
+    /** @return ReflectionClass<object> */
     private function getReflection(ResourceObject $ro): ReflectionClass
     {
         if ($ro instanceof WeavedInterface) {
