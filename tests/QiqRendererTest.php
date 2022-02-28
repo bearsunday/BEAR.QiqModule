@@ -39,6 +39,16 @@ class QiqRendererTest extends TestCase
 ', $view);
     }
 
+    public function testRenderWeavedResource(): void
+    {
+        $ro = (new Injector($this->module))->getInstance(FakeWeavedRo::class);
+        assert($ro instanceof FakeWeavedRo);
+        $ro = $ro->onGet(['name' => 'World']);
+        $view = (string) $ro;
+        $this->assertSame('Hello, World. That was Qiq! And this is PHP, World.
+', $view);
+    }
+
     public function testCacheRender(): void
     {
         $cachePath = __DIR__ . '/tmp';
