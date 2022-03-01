@@ -27,7 +27,8 @@
         "psr-4": {
             "BEAR\\QiqModule\\": [
                 "tests",
-                "tests/Fake"
+                "tests/Fake",
+                "tests/Fake-src"
             ],
             "Qiq\\Helper\\": [
                 "tests/Fake/helper"

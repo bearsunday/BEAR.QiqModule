@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\QiqModule;
 
+use BEAR\QiqModule\Resource\FakeRo;
+use BEAR\QiqModule\Resource\SubDirectory\FakeSub;
 use BEAR\Resource\RenderInterface;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\AbstractModule;
@@ -36,6 +38,26 @@ class QiqRendererTest extends TestCase
         $ro = $ro->onGet(['name' => 'World']);
         $view = (string) $ro;
         $this->assertSame('Hello, World. That was Qiq! And this is PHP, World.
+', $view);
+    }
+
+    public function testRenderWeavedResource(): void
+    {
+        $ro = (new Injector($this->module))->getInstance(FakeWeavedRo::class);
+        assert($ro instanceof FakeWeavedRo);
+        $ro = $ro->onGet(['name' => 'World']);
+        $view = (string) $ro;
+        $this->assertSame('Hello, World. That was Qiq! And this is PHP, World.
+', $view);
+    }
+
+    public function testRenderResourceInDirectory(): void
+    {
+        $ro = (new Injector($this->module))->getInstance(FakeSub::class);
+        assert($ro instanceof FakeSub);
+        $ro = $ro->onGet(['name' => 'World']);
+        $view = (string) $ro;
+        $this->assertSame('This resource in the directory. Hello, World. That was Qiq! And this is PHP, World.
 ', $view);
     }
 

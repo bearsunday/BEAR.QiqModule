@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BEAR\QiqModule;
+namespace BEAR\QiqModule\Resource;
 
-use BEAR\Resource\RenderInterface;
 use BEAR\Resource\ResourceObject;
 
-final class FakeRo extends ResourceObject
+class FakeRo extends ResourceObject
 {
     /**
      * @param array<string, int|string> $data
