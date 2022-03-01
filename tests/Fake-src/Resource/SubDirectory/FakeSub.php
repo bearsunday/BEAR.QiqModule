@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BEAR\QiqModule\Fake\Resource\FakeDirectory;
+namespace BEAR\QiqModule\Resource\SubDirectory;
 
 use BEAR\Resource\ResourceObject;
 
-class FakeRo extends ResourceObject
+class FakeSub extends ResourceObject
 {
     /**
      * @param array<string, int|string> $data

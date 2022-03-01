@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BEAR\QiqModule\Fake\Resource;
+namespace BEAR\QiqModule\Resource;
 
 use BEAR\Resource\ResourceObject;
 

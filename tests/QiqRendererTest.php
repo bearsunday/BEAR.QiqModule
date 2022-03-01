@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BEAR\QiqModule;
 
-use BEAR\QiqModule\Fake\Resource\FakeDirectory\FakeRo as FakeDirectoryRo;
-use BEAR\QiqModule\Fake\Resource\FakeRo;
+use BEAR\QiqModule\Resource\FakeRo;
+use BEAR\QiqModule\Resource\SubDirectory\FakeSub;
 use BEAR\Resource\RenderInterface;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\AbstractModule;
@@ -53,8 +53,8 @@ class QiqRendererTest extends TestCase
 
     public function testRenderResourceInDirectory(): void
     {
-        $ro = (new Injector($this->module))->getInstance(FakeDirectoryRo::class);
-        assert($ro instanceof FakeDirectoryRo);
+        $ro = (new Injector($this->module))->getInstance(FakeSub::class);
+        assert($ro instanceof FakeSub);
         $ro = $ro->onGet(['name' => 'World']);
         $view = (string) $ro;
         $this->assertSame('This resource in the directory. Hello, World. That was Qiq! And this is PHP, World.
