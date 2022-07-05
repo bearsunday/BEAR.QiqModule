@@ -33,7 +33,9 @@ final class QiqRenderer implements RenderInterface
         assert(is_array($ro->body));
         $template->setData($ro->body);
 
-        return ($template)();
+        $ro->view = ($template)();
+
+        return $ro->view;
     }
 
     /** @return ReflectionClass<object> */

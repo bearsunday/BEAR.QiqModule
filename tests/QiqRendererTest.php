@@ -37,6 +37,7 @@ class QiqRendererTest extends TestCase
         assert($ro instanceof FakeRo);
         $ro = $ro->onGet(['name' => 'World']);
         $view = (string) $ro;
+        $this->assertNotEmpty($ro->view);
         $this->assertSame('Hello, World. That was Qiq! And this is PHP, World.
 ', $view);
     }
