@@ -30,8 +30,8 @@ final class QiqRenderer implements RenderInterface
     {
         $template = clone $this->template;
         $this->setView($template, $ro);
-        assert(is_array($ro->body));
-        $template->setData($ro->body);
+        assert(is_array($ro->body) || $ro->body === null);
+        $template->setData($ro->body ?? []);
 
         $ro->view = ($template)();
 
