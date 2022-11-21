@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\QiqModule;
 
+use BEAR\QiqModule\Resource\FakeNullRo;
 use BEAR\QiqModule\Resource\FakeRo;
 use BEAR\QiqModule\Resource\SubDirectory\FakeSub;
 use BEAR\Resource\RenderInterface;
@@ -71,6 +72,17 @@ class QiqRendererTest extends TestCase
         $ro = $ro->onGet(['name' => 'World']);
         $view = (string) $ro;
         $this->assertSame('Hello, World. That was Qiq! And this is PHP, World.
+', $view);
+    }
+
+    public function testNullRender(): void
+    {
+        $ro = (new Injector($this->module))->getInstance(FakeNullRo::class);
+        assert($ro instanceof FakeNullRo);
+        $ro = $ro->onGet();
+        $view = (string) $ro;
+        $this->assertNotEmpty($ro->view);
+        $this->assertSame('This resource has null body. Hello, World. That was Qiq! And this is PHP, World.
 ', $view);
     }
 }
