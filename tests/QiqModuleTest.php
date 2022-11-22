@@ -8,8 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class QiqModuleTest extends TestCase
 {
-    /** @var QiqModule */
-    protected $qiqModule;
+    protected QiqModule $qiqModule;
 
     protected function setUp(): void
     {

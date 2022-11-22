@@ -6,9 +6,7 @@ namespace BEAR\QiqModule;
 
 use Ray\Di\ProviderInterface;
 
-/**
- * @implements ProviderInterface<\Qiq\HelperLocator>
- */
+/** @implements ProviderInterface<\Qiq\HelperLocator> */
 class HelperLocatorProvider implements ProviderInterface
 {
     public function get(): \Qiq\HelperLocator

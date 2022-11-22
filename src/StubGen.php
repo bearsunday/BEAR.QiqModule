@@ -27,9 +27,7 @@ use const PHP_EOL;
 
 final class StubGen
 {
-    /**
-     * @param ReflectionClass<Helper> $class
-     */
+    /** @param ReflectionClass<Helper> $class */
     private function docMethod(ReflectionClass $class): string
     {
         $method = new ReflectionMethod($class->getName(), '__invoke');
@@ -50,9 +48,7 @@ final class StubGen
         $iterator = new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS);
         $sortIterator = new class ($iterator) extends SplHeap
         {
-            /**
-             * @param Iterator<string> $iterator
-             */
+            /** @param Iterator<string> $iterator */
             public function __construct(Iterator $iterator)
             {
                 foreach ($iterator as $item) {
@@ -75,9 +71,11 @@ final class StubGen
             assert(class_exists($className));
             /** @var ReflectionClass<Helper> $class */
             $class = new ReflectionClass($className);
-            if (! $class->isAbstract()) {
-                $doc[] = sprintf(' * @method %s', $this->docMethod($class));
+            if ($class->isAbstract()) {
+                continue;
             }
+
+            $doc[] = sprintf(' * @method %s', $this->docMethod($class));
         }
 
         $docString = implode(PHP_EOL, $doc);
@@ -90,9 +88,7 @@ final class StubGen
     EOT;
     }
 
-    /**
-     * @param ReflectionClass<Helper> $class
-     */
+    /** @param ReflectionClass<Helper> $class */
     private function methodDocGen(string $dir, ReflectionClass $class): string
     {
         $contents = (string) file_get_contents((string) $class->getFileName());
@@ -101,9 +97,7 @@ final class StubGen
         return str_replace($search, $this->docBlock($dir) . $search, $contents);
     }
 
-    /**
-     * @param class-string $target
-     */
+    /** @param class-string $target */
     public function __invoke(string $target, string $helperDir): void
     {
         /** @var ReflectionClass<Helper> $class */

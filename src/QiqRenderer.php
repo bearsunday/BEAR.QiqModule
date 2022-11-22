@@ -22,7 +22,7 @@ final class QiqRenderer implements RenderInterface
     private const LENGTH_OF_RESOURCE_DIR = 13;
 
     public function __construct(
-        private TemplateCore $template
+        private TemplateCore $template,
     ) {
     }
 

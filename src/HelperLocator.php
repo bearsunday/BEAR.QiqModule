@@ -13,7 +13,7 @@ use function function_exists;
 
 class HelperLocator extends \Qiq\HelperLocator
 {
-    public static function new(?Escape $escape = null): self
+    public static function new(Escape|null $escape = null): self
     {
         $escape ??= new Escape('utf-8');
 
@@ -26,14 +26,13 @@ class HelperLocator extends \Qiq\HelperLocator
         ], $escape);
     }
 
-    protected array $factories = [];
+    /** @var array<object> */
     protected array $instances = [];
     protected Escape $escape;
 
-    public function __construct(array $factories, ?Escape $escape = null)
+    public function __construct(protected array $factories = [], Escape|null $escape = null)
     {
-        $this->factories = $factories;
-        $this->escape  = $escape ?: new Escape('utf-8');
+        $this->escape = $escape ?: new Escape('utf-8');
     }
 
     public function __call(string $name, array $args): mixed
