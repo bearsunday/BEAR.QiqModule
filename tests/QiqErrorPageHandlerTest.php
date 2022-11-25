@@ -33,7 +33,7 @@ class QiqErrorPageHandlerTest extends TestCase
         $this->handler = new QiqErrorHandler(
             $errorPage,
             new FakeHttpResponder(),
-            new NullLogger()
+            new NullLogger(),
         );
 
         parent::setUp();
@@ -51,9 +51,7 @@ class QiqErrorPageHandlerTest extends TestCase
         return $handler;
     }
 
-    /**
-     * @depends testHandle
-     */
+    /** @depends testHandle */
     public function testTransfer(): void
     {
         $request = new RouterMatch();

@@ -16,7 +16,7 @@ class QiqErrorPageRenderer implements RenderInterface
 {
     public function __construct(
         #[Named('qiq_template_dir')] private string $templateDir,
-        #[Named('qiq_error_view_name')] private ?string $errorViewName = null
+        #[Named('qiq_error_view_name')] private string|null $errorViewName = null,
     ) {
     }
 

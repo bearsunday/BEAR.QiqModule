@@ -18,7 +18,7 @@ final class QiqModule extends AbstractModule
 {
     public function __construct(
         private string $templateDir,
-        private ?AbstractModule $module = null
+        private AbstractModule|null $module = null,
     ) {
         parent::__construct($this->module);
     }
@@ -28,7 +28,7 @@ final class QiqModule extends AbstractModule
         $this->bind(TemplateCore::class)->to(Template::class)->in(Scope::SINGLETON);
         $this->bind(TemplateLocator::class)->toConstructor(
             TemplateLocator::class,
-            ['paths' => 'qiq_paths', 'extension' => 'qiq_extension']
+            ['paths' => 'qiq_paths', 'extension' => 'qiq_extension'],
         );
         $this->bind()->annotatedWith('qiq_template_dir')->toInstance($this->templateDir);
         $this->bind()->annotatedWith('qiq_paths')->toInstance([$this->templateDir]);

@@ -10,7 +10,7 @@ use Ray\Di\AbstractModule;
 
 final class QiqErrorModule extends AbstractModule
 {
-    public function __construct(private ?string $errorViewName = 'Error', ?AbstractModule $module = null)
+    public function __construct(private string|null $errorViewName = 'Error', AbstractModule|null $module = null)
     {
         parent::__construct($module);
     }

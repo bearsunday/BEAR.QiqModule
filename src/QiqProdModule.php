@@ -11,14 +11,12 @@ use ReflectionException;
 
 final class QiqProdModule extends AbstractModule
 {
-    public function __construct(private string $cachePath, private ?AbstractModule $module = null)
+    public function __construct(private string $cachePath, private AbstractModule|null $module = null)
     {
         parent::__construct($this->module);
     }
 
-    /**
-     * @throws ReflectionException
-     */
+    /** @throws ReflectionException */
     protected function configure(): void
     {
         $this->bind()->annotatedWith('qiq_cache_path')->toInstance($this->cachePath);
