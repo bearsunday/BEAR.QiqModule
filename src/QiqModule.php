@@ -25,6 +25,7 @@ final class QiqModule extends AbstractModule
 
     protected function configure(): void
     {
+        $this->bind(Template::class)->in(Scope::SINGLETON);
         $this->bind(TemplateCore::class)->to(Template::class)->in(Scope::SINGLETON);
         $this->bind(TemplateLocator::class)->toConstructor(
             TemplateLocator::class,
