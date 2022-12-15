@@ -37,7 +37,6 @@
             ]
         }
     },
-    "bin": ["bin/qiq_stubgen.php"],
     "scripts": {
         "setup": "php bin/setup.php",
         "test": "./vendor/bin/phpunit",
