@@ -8,22 +8,23 @@ use Qiq\Escape;
 use Qiq\Exception;
 use Qiq\Helper;
 
+use function array_merge;
 use function class_exists;
 use function function_exists;
 
 class HelperLocator extends \Qiq\HelperLocator
 {
-    public static function new(Escape|null $escape = null): self
+    public static function new(Escape|null $escape = null, array $factories = []): static
     {
         $escape ??= new Escape('utf-8');
 
-        return new static([
+        return new static(array_merge([
             'a'      => static fn () => new Helper\EscapeAttr($escape),
             'c'      => static fn () => new Helper\EscapeCss($escape),
             'escape' => static fn () => $escape,
             'h'      => static fn () => new Helper\EscapeHtml($escape),
             'u'      => static fn () => new Helper\EscapeUrl($escape),
-        ], $escape);
+        ], $factories), $escape);
     }
 
     /** @var array<object> */
