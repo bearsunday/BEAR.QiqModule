@@ -6,4 +6,3 @@ parameters:
   excludePaths:
     - tests/tmp/
     - tests/Fake/*
-    - src/HelperLocator.php

@@ -4,7 +4,7 @@
     "license": "proprietary",
     "description": "",
     "require": {
-        "php": "^8.1.0",
+        "php": "^8.3.0",
         "ext-json": "*",
         "bear/dotenv": "^1.0",
         "bear/package": "^1.12.1",
@@ -22,8 +22,7 @@
     },
     "autoload": {
         "psr-4": {
-            "MyVendor\\MyProject\\": "src/",
-            "Qiq\\Helper\\": "var/qiq/helper/"
+            "MyVendor\\MyProject\\": "src/"
         }
     },
     "autoload-dev": {

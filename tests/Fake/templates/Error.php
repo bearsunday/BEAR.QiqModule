@@ -1,1 +1,1 @@
-code: {{h $this->code }} message: {{h $this->message }}
+code: {{h $code }} message: {{h $message }}

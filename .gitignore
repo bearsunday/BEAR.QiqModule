@@ -7,3 +7,5 @@
 /.phpcs-cache
 /tests/tmp/
 /coverage.xml
+/vendor-bin/tools/composer.lock
+/demo/composer.lock

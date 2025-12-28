@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BEAR\QiqModule;
 
 use PHPUnit\Framework\TestCase;
-use Qiq\Compiler\Compiler;
+use Qiq\Compiler;
 use Qiq\Compiler\QiqCompiler;
 use Ray\Di\Injector;
 

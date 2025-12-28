@@ -6,7 +6,7 @@ namespace BEAR\QiqModule;
 
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\ResourceObject;
-use Qiq\TemplateCore;
+use Qiq\Template;
 use Ray\Aop\WeavedInterface;
 use ReflectionClass;
 
@@ -22,18 +22,20 @@ final class QiqRenderer implements RenderInterface
     private const LENGTH_OF_RESOURCE_DIR = 13;
 
     public function __construct(
-        private TemplateCore $template,
+        private Template $template,
     ) {
     }
 
-    public function render(ResourceObject $ro): string
+    public function render(ResourceObject $ro): string|null
     {
         $template = clone $this->template;
         $this->setView($template, $ro);
         assert(is_array($ro->body) || $ro->body === null);
         $template->setData($ro->body ?? []);
 
-        $ro->view = ($template)();
+        /** @var string $view */
+        $view = ($template)();
+        $ro->view = $view;
 
         return $ro->view;
     }
@@ -51,7 +53,7 @@ final class QiqRenderer implements RenderInterface
         return new ReflectionClass($ro);
     }
 
-    private function setView(TemplateCore $tpl, ResourceObject $ro): void
+    private function setView(Template $tpl, ResourceObject $ro): void
     {
         $fileName = $this->getReflection($ro)->getFileName();
         assert(is_string($fileName));

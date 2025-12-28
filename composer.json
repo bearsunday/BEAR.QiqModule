@@ -9,8 +9,8 @@
         }
     ],
     "require": {
-        "php": "^8.0",
-        "qiq/qiq": "^1.0",
+        "php": "^8.1",
+        "qiq/qiq": "^3.0",
         "bear/resource": "^1.16",
         "bear/sunday": "^1.6"
     },

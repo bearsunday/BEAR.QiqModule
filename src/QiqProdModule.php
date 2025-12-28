@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\QiqModule;
 
-use Qiq\Compiler\Compiler;
+use Qiq\Compiler;
 use Qiq\Compiler\QiqCompiler;
 use Ray\Di\AbstractModule;
 use ReflectionException;

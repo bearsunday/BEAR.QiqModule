@@ -6,12 +6,14 @@ namespace BEAR\QiqModule;
 
 use BEAR\Resource\RenderInterface;
 use BEAR\Resource\ResourceObject;
+use BEAR\Resource\Types;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
 
-class QiqErrorPage extends ResourceObject
+/** @psalm-import-type Headers from Types */
+final class QiqErrorPage extends ResourceObject
 {
-    /** @var array<string, string>  */
+    /** @var Headers */
     public $headers = ['content-type' => 'text/html; charset=utf-8'];
 
     /** @var RenderInterface|null */
