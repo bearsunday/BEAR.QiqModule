@@ -12,7 +12,7 @@ use Ray\Di\Di\Named;
 use function assert;
 use function is_array;
 
-class QiqErrorPageRenderer implements RenderInterface
+final class QiqErrorPageRenderer implements RenderInterface
 {
     public function __construct(
         #[Named('qiq_template_dir')] private string $templateDir,

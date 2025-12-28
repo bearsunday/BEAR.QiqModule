@@ -9,4 +9,7 @@ use Ray\Aop\WeavedInterface;
 
 class FakeWeavedRo extends FakeRo implements WeavedInterface
 {
+    public function _setBindings(array $bindings): void
+    {
+    }
 }

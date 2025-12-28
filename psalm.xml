@@ -5,7 +5,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
-    errorBaseline="psalm-baseline.xml"
+    findUnusedBaselineEntry="false"
+    findUnusedCode="false"
 >
     <projectFiles>
         <directory name="src" />
@@ -14,10 +15,6 @@
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
-        <InvalidFunctionCall>
-            <errorLevel type="suppress">
-                <file name="src/QiqRenderer.php" />
-            </errorLevel>
-        </InvalidFunctionCall>
+        <MissingOverrideAttribute errorLevel="suppress" />
     </issueHandlers>
 </psalm>

@@ -6,7 +6,3 @@ parameters:
   excludePaths:
     - tests/tmp/
     - tests/Fake/*
-  ignoreErrors:
-        -
-            message: '#^Trying to invoke Qiq\\Engine but it might not be a callable\.$#'
-            path: src/QiqRenderer.php
