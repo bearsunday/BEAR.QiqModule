@@ -15,14 +15,15 @@ use function is_array;
 final class QiqErrorPageRenderer implements RenderInterface
 {
     public function __construct(
-        #[Named('qiq_template_dir')] private string $templateDir,
+        private Template $template,
         #[Named('qiq_error_view_name')] private string|null $errorViewName = null,
     ) {
     }
 
     public function render(ResourceObject $ro): string
     {
-        $tpl = Template::new($this->templateDir);
+        // the bound Template is a singleton carrying render state
+        $tpl = clone $this->template;
         $tpl->setView($this->errorViewName);
         assert(is_array($ro->body));
         $status = $ro->body['status'];

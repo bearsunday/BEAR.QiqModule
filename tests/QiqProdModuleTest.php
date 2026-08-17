@@ -4,38 +4,67 @@ declare(strict_types=1);
 
 namespace BEAR\QiqModule;
 
+use BEAR\Sunday\Compile\CompileStepInterface;
 use PHPUnit\Framework\TestCase;
 use Qiq\Compiler;
-use Qiq\Compiler\QiqCompiler;
 use Ray\Di\Injector;
 
-use function md5;
-use function serialize;
+use function assert;
+use function iterator_to_array;
+use function mkdir;
+use function sys_get_temp_dir;
+use function uniqid;
 
 class QiqProdModuleTest extends TestCase
 {
-    private QiqProdModule $qiqProdModule;
-    private Compiler $compiler;
-    private string $cachePath;
+    private Injector $injector;
+
+    /** @var non-empty-string */
+    private string $stepDir;
 
     protected function setUp(): void
     {
-        $this->qiqProdModule = new QiqProdModule('/path/to/cache', new QiqModule('templateDir'));
-        $injector = new Injector($this->qiqProdModule);
-        /** @var string $cachePath */
-        $cachePath = $injector->getInstance('', 'qiq_cache_path');
-        $this->cachePath = $cachePath;
-        /** @var Compiler $compiler */
-        $compiler = $injector->getInstance(Compiler::class);
-        $this->compiler = $compiler;
+        $module = new QiqProdModule('/path/to/cache', new QiqModule('/no/such/templates'));
+        $this->injector = new Injector($module);
+        $this->stepDir = sys_get_temp_dir() . '/' . uniqid('qiq-prod-', true);
+        mkdir($this->stepDir, 0777, true);
+        parent::setUp();
     }
 
-    public function testIsInstanceOfQiqModule(): void
+    protected function tearDown(): void
     {
-        $actual = $this->qiqProdModule;
-        $this->assertInstanceOf(QiqProdModule::class, $actual);
+        FakeTree::delete($this->stepDir);
+        parent::tearDown();
+    }
 
-        self::assertSame('/path/to/cache', $this->cachePath);
-        self::assertSame(md5(serialize(new QiqCompiler('/path/to/cache'))), md5(serialize($this->compiler)));
+    public function testCompilerReadsTheBuiltArtifacts(): void
+    {
+        $compiler = $this->injector->getInstance(Compiler::class);
+
+        $this->assertInstanceOf(QiqServeCompiler::class, $compiler);
+        $this->assertSame('/path/to/cache', $this->injector->getInstance('', 'qiq_cache_path'));
+    }
+
+    public function testCompileStepIsBoundToItsName(): void
+    {
+        $this->assertInstanceOf(QiqCompileStep::class, $this->step());
+    }
+
+    /** A skeleton has the module installed before it has any template */
+    public function testStepWithoutTemplates(): void
+    {
+        $step = $this->step();
+
+        $this->assertSame(0, $step($this->stepDir));
+    }
+
+    private function step(): CompileStepInterface
+    {
+        $holder = $this->injector->getInstance(FakeCompileSteps::class);
+        assert($holder instanceof FakeCompileSteps);
+        $step = iterator_to_array($holder->steps)[QiqCompileStep::NAME];
+        assert($step instanceof CompileStepInterface);
+
+        return $step;
     }
 }

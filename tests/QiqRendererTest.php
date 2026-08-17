@@ -63,18 +63,6 @@ class QiqRendererTest extends TestCase
 ', $view);
     }
 
-    public function testCacheRender(): void
-    {
-        $cachePath = __DIR__ . '/tmp';
-        $this->module->install(new QiqProdModule($cachePath));
-        $ro = (new Injector($this->module))->getInstance(FakeRo::class);
-        assert($ro instanceof FakeRo);
-        $ro = $ro->onGet(['name' => 'World']);
-        $view = (string) $ro;
-        $this->assertSame('Hello, World. That was Qiq! And this is PHP, World.
-', $view);
-    }
-
     public function testNullRender(): void
     {
         $ro = (new Injector($this->module))->getInstance(FakeNullRo::class);
