@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace BEAR\QiqModule;
 
+use BEAR\AppMeta\AbstractAppMeta;
 use BEAR\QiqModule\Exception\TemplateNotCompiledException;
 use BEAR\QiqModule\Resource\FakeRo;
+use BEAR\Sunday\Compile\CompileStepInterface;
 use PHPUnit\Framework\TestCase;
 use Qiq\Compiler;
 use Ray\Di\Injector;
@@ -18,22 +20,13 @@ use function uniqid;
 
 class QiqServeCompilerTest extends TestCase
 {
-    private const TEMPLATES = __DIR__ . '/Fake/templates';
+    private const RENDERED = 'Hello, World. That was Qiq! And this is PHP, World.' . "\n";
 
     private string $baseDir;
-
-    /** @var non-empty-string */
-    private string $appDir;
-
-    /** @var non-empty-string */
-    private string $stepDir;
 
     protected function setUp(): void
     {
         $this->baseDir = sys_get_temp_dir() . '/' . uniqid('qiq-serve-', true);
-        $this->appDir = $this->baseDir . '/app';
-        $this->stepDir = $this->stepDir($this->appDir);
-        mkdir($this->stepDir, 0777, true);
         parent::setUp();
     }
 
@@ -45,81 +38,91 @@ class QiqServeCompilerTest extends TestCase
 
     public function testUncompiledTemplate(): void
     {
-        $compiler = new QiqServeCompiler(new FakeAppMeta($this->appDir), [self::TEMPLATES]);
+        $injector = $this->prodInjector($this->app('app'));
 
         $this->expectException(TemplateNotCompiledException::class);
-        $compiler->compile(self::TEMPLATES . '/FakeRo.php');
+        $this->render($injector);
     }
 
-    public function testStepDirComesFromAppDir(): void
+    public function testTheStepAndTheCompilerMeetInTheSameDirectory(): void
     {
-        (new QiqCompileStep([self::TEMPLATES], '.php'))($this->stepDir);
-        $compiler = new QiqServeCompiler(new FakeAppMeta($this->appDir), [self::TEMPLATES]);
+        $injector = $this->prodInjector($this->app('app'));
 
-        $this->assertSame(
-            $this->stepDir . '/FakeRo.php',
-            $compiler->compile(self::TEMPLATES . '/FakeRo.php'),
-        );
+        $this->compile($injector);
+
+        $this->assertSame(self::RENDERED, $this->render($injector));
     }
 
     public function testClearKeepsArtifacts(): void
     {
-        (new QiqCompileStep([self::TEMPLATES], '.php'))($this->stepDir);
-        $compiler = new QiqServeCompiler(new FakeAppMeta($this->appDir), [self::TEMPLATES]);
+        $injector = $this->prodInjector($this->app('app'));
+        $this->compile($injector);
+        $compiler = $injector->getInstance(Compiler::class);
+        assert($compiler instanceof Compiler);
 
         $compiler->clear();
 
-        $this->assertSame(
-            $this->stepDir . '/FakeRo.php',
-            $compiler->compile(self::TEMPLATES . '/FakeRo.php'),
-        );
+        $this->assertSame(self::RENDERED, $this->render($injector));
     }
 
     public function testRelocatedTreeRenders(): void
     {
-        $before = $this->baseDir . '/before';
-        FakeTree::copy(self::TEMPLATES, $before . '/templates');
-        mkdir($this->stepDir($before), 0777, true);
-        (new QiqCompileStep([$before . '/templates'], '.php'))($this->stepDir($before));
-        rename($before, $this->baseDir . '/after');
+        $this->compile($this->prodInjector($this->app('before')));
+        rename($this->baseDir . '/before', $this->baseDir . '/after');
 
-        $after = $this->baseDir . '/after';
-        $injector = $this->prodInjector($after, $after . '/templates');
+        $injector = $this->prodInjector($this->baseDir . '/after');
 
-        $this->assertSame(
-            'Hello, World. That was Qiq! And this is PHP, World.' . "\n",
-            $this->render($injector),
-        );
+        $this->assertSame(self::RENDERED, $this->render($injector));
     }
 
     /**
-     * @param non-empty-string $appDir
-     *
-     * @return non-empty-string
+     * The caller side of CompileStepInterface: bear/package makes {buildDir}/{binding key} and invokes.
+     * Deriving the directory any other way is what this test is here to catch, so it must not be spelled
+     * out a second time.
      */
-    private function stepDir(string $appDir): string
+    private function compile(Injector $injector): void
     {
-        return $appDir . '/var/build/' . QiqCompileStep::NAME;
+        $meta = $injector->getInstance(AbstractAppMeta::class);
+        assert($meta instanceof AbstractAppMeta);
+        $holder = $injector->getInstance(FakeCompileSteps::class);
+        assert($holder instanceof FakeCompileSteps);
+
+        foreach ($holder->steps as $key => $step) {
+            assert($step instanceof CompileStepInterface);
+            $stepDir = $meta->buildDir . '/' . $key;
+            mkdir($stepDir, 0777, true);
+            $step($stepDir);
+        }
+    }
+
+    /** @return non-empty-string appDir holding a copy of the templates */
+    private function app(string $name): string
+    {
+        $appDir = $this->baseDir . '/' . $name;
+        FakeTree::copy(__DIR__ . '/Fake/templates', $appDir . '/var/templates');
+
+        return $appDir;
     }
 
     /** @param non-empty-string $appDir */
-    private function prodInjector(string $appDir, string $templates): Injector
+    private function prodInjector(string $appDir): Injector
     {
         // the prod module has to be the outer one to take over the Compiler binding
         $module = new FakeAppMetaModule(
             $appDir,
-            new QiqProdModule(new QiqModule($templates)),
+            new QiqProdModule(new QiqModule($appDir . '/var/templates')),
         );
         $this->assertInstanceOf(QiqServeCompiler::class, (new Injector($module))->getInstance(Compiler::class));
 
         return new Injector($module);
     }
 
+    /** ResourceObject::__toString() turns a render failure into a warning, so render through toString() */
     private function render(Injector $injector): string
     {
         $ro = $injector->getInstance(FakeRo::class);
         assert($ro instanceof FakeRo);
 
-        return (string) $ro->onGet(['name' => 'World']);
+        return $ro->onGet(['name' => 'World'])->toString();
     }
 }

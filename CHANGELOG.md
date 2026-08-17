@@ -6,13 +6,13 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- `QiqCompileStep` compiles every template into `{appDir}/var/build/qiq` during the build, so a read-only tree can serve
+- `QiqCompileStep` compiles every template into `{buildDir}/qiq` during the build, so a read-only tree can serve
 
 ### Changed
 
 - BREAKING: `QiqProdModule` binds a read-only `Compiler`, so prod raises `TemplateNotCompiledException` until the compile step has run
 - BREAKING: require PHP 8.2+ (from PHP 8.1), the floor of the `bear/sunday` that carries `CompileStepInterface`
-- BREAKING: `QiqProdModule::__construct()` takes no cache path; the read side derives `{appDir}/var/build/qiq` from `AbstractAppMeta`
+- BREAKING: `QiqProdModule::__construct()` takes no cache path; the read side takes `AbstractAppMeta::$buildDir`
 - `QiqErrorPageRenderer` renders with the injected `Template` instead of `Template::new()`
 
 ### Migration Guide

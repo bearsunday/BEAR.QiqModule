@@ -14,9 +14,6 @@ use function is_file;
 /** Reads what QiqCompileStep wrote: serving never touches the filesystem for writes */
 final class QiqServeCompiler implements Compiler
 {
-    /** Build root bear/package runs the compile steps into */
-    private const BUILD_DIR = '/var/build/';
-
     private string $compiledDir;
     private TemplateKey $key;
 
@@ -25,7 +22,7 @@ final class QiqServeCompiler implements Compiler
         AbstractAppMeta $meta,
         #[Named('qiq_paths')] array $paths,
     ) {
-        $this->compiledDir = $meta->appDir . self::BUILD_DIR . QiqCompileStep::NAME;
+        $this->compiledDir = $meta->buildDir . '/' . QiqCompileStep::NAME;
         $this->key = new TemplateKey($paths);
     }
 
