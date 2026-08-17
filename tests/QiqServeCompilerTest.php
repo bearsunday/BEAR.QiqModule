@@ -18,14 +18,22 @@ use function uniqid;
 
 class QiqServeCompilerTest extends TestCase
 {
+    private const TEMPLATES = __DIR__ . '/Fake/templates';
+
     private string $baseDir;
-    private string $buildDir;
+
+    /** @var non-empty-string */
+    private string $appDir;
+
+    /** @var non-empty-string */
+    private string $stepDir;
 
     protected function setUp(): void
     {
         $this->baseDir = sys_get_temp_dir() . '/' . uniqid('qiq-serve-', true);
-        $this->buildDir = $this->baseDir . '/build';
-        mkdir($this->buildDir . '/' . QiqCompileStep::NAME, 0777, true);
+        $this->appDir = $this->baseDir . '/app';
+        $this->stepDir = $this->stepDir($this->appDir);
+        mkdir($this->stepDir, 0777, true);
         parent::setUp();
     }
 
@@ -37,35 +45,46 @@ class QiqServeCompilerTest extends TestCase
 
     public function testUncompiledTemplate(): void
     {
-        $compiler = new QiqServeCompiler($this->buildDir, [__DIR__ . '/Fake/templates']);
+        $compiler = new QiqServeCompiler(new FakeAppMeta($this->appDir), [self::TEMPLATES]);
 
         $this->expectException(TemplateNotCompiledException::class);
-        $compiler->compile(__DIR__ . '/Fake/templates/FakeRo.php');
+        $compiler->compile(self::TEMPLATES . '/FakeRo.php');
+    }
+
+    public function testStepDirComesFromAppDir(): void
+    {
+        (new QiqCompileStep([self::TEMPLATES], '.php'))($this->stepDir);
+        $compiler = new QiqServeCompiler(new FakeAppMeta($this->appDir), [self::TEMPLATES]);
+
+        $this->assertSame(
+            $this->stepDir . '/FakeRo.php',
+            $compiler->compile(self::TEMPLATES . '/FakeRo.php'),
+        );
     }
 
     public function testClearKeepsArtifacts(): void
     {
-        $templates = __DIR__ . '/Fake/templates';
-        (new QiqCompileStep([$templates], '.php'))($this->buildDir . '/' . QiqCompileStep::NAME);
-        $compiler = new QiqServeCompiler($this->buildDir, [$templates]);
+        (new QiqCompileStep([self::TEMPLATES], '.php'))($this->stepDir);
+        $compiler = new QiqServeCompiler(new FakeAppMeta($this->appDir), [self::TEMPLATES]);
 
         $compiler->clear();
 
         $this->assertSame(
-            $this->buildDir . '/' . QiqCompileStep::NAME . '/FakeRo.php',
-            $compiler->compile($templates . '/FakeRo.php'),
+            $this->stepDir . '/FakeRo.php',
+            $compiler->compile(self::TEMPLATES . '/FakeRo.php'),
         );
     }
 
     public function testRelocatedTreeRenders(): void
     {
-        FakeTree::copy(__DIR__ . '/Fake/templates', $this->baseDir . '/before/templates');
-        (new QiqCompileStep([$this->baseDir . '/before/templates'], '.php'))(
-            $this->buildDir . '/' . QiqCompileStep::NAME,
-        );
-        rename($this->baseDir . '/before', $this->baseDir . '/after');
+        $before = $this->baseDir . '/before';
+        FakeTree::copy(self::TEMPLATES, $before . '/templates');
+        mkdir($this->stepDir($before), 0777, true);
+        (new QiqCompileStep([$before . '/templates'], '.php'))($this->stepDir($before));
+        rename($before, $this->baseDir . '/after');
 
-        $injector = $this->prodInjector($this->baseDir . '/after/templates', null);
+        $after = $this->baseDir . '/after';
+        $injector = $this->prodInjector($after, $after . '/templates');
 
         $this->assertSame(
             'Hello, World. That was Qiq! And this is PHP, World.' . "\n",
@@ -73,25 +92,23 @@ class QiqServeCompilerTest extends TestCase
         );
     }
 
-    public function testCachePathStandsInForBuildDir(): void
+    /**
+     * @param non-empty-string $appDir
+     *
+     * @return non-empty-string
+     */
+    private function stepDir(string $appDir): string
     {
-        $templates = __DIR__ . '/Fake/templates';
-        (new QiqCompileStep([$templates], '.php'))($this->buildDir . '/' . QiqCompileStep::NAME);
-
-        $injector = $this->prodInjector($templates, $this->buildDir);
-
-        $this->assertSame(
-            'Hello, World. That was Qiq! And this is PHP, World.' . "\n",
-            $this->render($injector),
-        );
+        return $appDir . '/var/build/' . QiqCompileStep::NAME;
     }
 
-    private function prodInjector(string $templates, string|null $cachePath): Injector
+    /** @param non-empty-string $appDir */
+    private function prodInjector(string $appDir, string $templates): Injector
     {
         // the prod module has to be the outer one to take over the Compiler binding
-        $module = new FakeBuildDirModule(
-            $this->buildDir,
-            new QiqProdModule($cachePath, new QiqModule($templates)),
+        $module = new FakeAppMetaModule(
+            $appDir,
+            new QiqProdModule(new QiqModule($templates)),
         );
         $this->assertInstanceOf(QiqServeCompiler::class, (new Injector($module))->getInstance(Compiler::class));
 

@@ -24,7 +24,7 @@ class QiqProdModuleTest extends TestCase
 
     protected function setUp(): void
     {
-        $module = new QiqProdModule('/path/to/cache', new QiqModule('/no/such/templates'));
+        $module = new FakeAppMetaModule('/path/to/app', new QiqProdModule(new QiqModule('/no/such/templates')));
         $this->injector = new Injector($module);
         $this->stepDir = sys_get_temp_dir() . '/' . uniqid('qiq-prod-', true);
         mkdir($this->stepDir, 0777, true);
@@ -42,7 +42,6 @@ class QiqProdModuleTest extends TestCase
         $compiler = $this->injector->getInstance(Compiler::class);
 
         $this->assertInstanceOf(QiqServeCompiler::class, $compiler);
-        $this->assertSame('/path/to/cache', $this->injector->getInstance('', 'qiq_cache_path'));
     }
 
     public function testCompileStepIsBoundToItsName(): void

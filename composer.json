@@ -12,7 +12,8 @@
         "php": "^8.2",
         "qiq/qiq": "^3.0",
         "bear/resource": "^1.16",
-        "bear/sunday": "^1.8@dev"
+        "bear/sunday": "^1.8@dev",
+        "bear/app-meta": "^1.8"
     },
     "conflict": {
         "bear/package": "<1.25"

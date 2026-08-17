@@ -4,26 +4,28 @@ declare(strict_types=1);
 
 namespace BEAR\QiqModule;
 
+use BEAR\AppMeta\AbstractAppMeta;
 use BEAR\QiqModule\Exception\TemplateNotCompiledException;
-use BEAR\Sunday\Compile\Annotation\BuildDir;
 use Qiq\Compiler;
 use Ray\Di\Di\Named;
 
 use function is_file;
-use function rtrim;
 
 /** Reads what QiqCompileStep wrote: serving never touches the filesystem for writes */
 final class QiqServeCompiler implements Compiler
 {
+    /** Build root bear/package runs the compile steps into */
+    private const BUILD_DIR = '/var/build/';
+
     private string $compiledDir;
     private TemplateKey $key;
 
     /** @param list<string> $paths */
     public function __construct(
-        #[BuildDir] string $buildDir,
+        AbstractAppMeta $meta,
         #[Named('qiq_paths')] array $paths,
     ) {
-        $this->compiledDir = rtrim($buildDir, '/') . '/' . QiqCompileStep::NAME;
+        $this->compiledDir = $meta->appDir . self::BUILD_DIR . QiqCompileStep::NAME;
         $this->key = new TemplateKey($paths);
     }
 
