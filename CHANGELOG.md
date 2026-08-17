@@ -29,6 +29,11 @@ $this->install(new QiqProdModule($this->appMeta->appDir . '/var/tmp/cache/qiq'))
 $this->install(new QiqProdModule());
 ```
 
+Delete the existing `var/build` and compile again rather than compiling on top of it. A `Meta`
+baked into DI scripts from before `bear/app-meta` 1.13 carries no `$buildDir`, and it is read
+while the container is built, so the application stops answering at boot instead of losing a
+single template.
+
 The argument-less form needs the `bear/package` release that runs compile steps.
 Templates inside a phar stay unsupported: `Qiq\Catalog` reads the `phar:` scheme of a
 template root as a collection name, so it never resolves one. A compiled DI script
