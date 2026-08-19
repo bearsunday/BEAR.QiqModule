@@ -13,7 +13,7 @@
         "qiq/qiq": "^3.0",
         "bear/resource": "^1.16",
         "bear/sunday": "^1.8@dev",
-        "bear/app-meta": "dev-build-dir as 1.13.0"
+        "bear/app-meta": "^1.13"
     },
     "conflict": {
         "bear/package": "<1.25"
