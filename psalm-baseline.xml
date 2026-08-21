@@ -14,23 +14,42 @@
     <ClassMustBeFinal>
       <code><![CDATA[HelperLocator]]></code>
     </ClassMustBeFinal>
-    <UndefinedClass>
-      <code><![CDATA[\Qiq\HelperLocator]]></code>
-    </UndefinedClass>
+    <InvalidPropertyAssignmentValue>
+      <code><![CDATA[$this->instances]]></code>
+    </InvalidPropertyAssignmentValue>
+    <MissingClosureReturnType>
+      <code><![CDATA[fn () => new $maybeHelper($this->escape)]]></code>
+    </MissingClosureReturnType>
+    <MixedAssignment>
+      <code><![CDATA[$factory]]></code>
+    </MixedAssignment>
+    <MixedFunctionCall>
+      <code><![CDATA[$factory()]]></code>
+      <code><![CDATA[$this->get($name)(...$args)]]></code>
+    </MixedFunctionCall>
+    <MixedMethodCall>
+      <code><![CDATA[new $maybeHelper($this->escape)]]></code>
+    </MixedMethodCall>
+    <MixedPropertyTypeCoercion>
+      <code><![CDATA[$this->instances]]></code>
+    </MixedPropertyTypeCoercion>
+    <NonInvariantDocblockPropertyType>
+      <code><![CDATA[$instances]]></code>
+    </NonInvariantDocblockPropertyType>
+    <UnsafeInstantiation>
+      <code><![CDATA[new static(array_merge([
+            'a'      => static fn () => new Helper\EscapeAttr($escape),
+            'c'      => static fn () => new Helper\EscapeCss($escape),
+            'escape' => static fn () => $escape,
+            'h'      => static fn () => new Helper\EscapeHtml($escape),
+            'u'      => static fn () => new Helper\EscapeUrl($escape),
+        ], $factories), $escape)]]></code>
+    </UnsafeInstantiation>
   </file>
   <file src="src/HelperLocatorProvider.php">
     <ClassMustBeFinal>
       <code><![CDATA[HelperLocatorProvider]]></code>
     </ClassMustBeFinal>
-    <MissingDependency>
-      <code><![CDATA[HelperLocator]]></code>
-    </MissingDependency>
-    <UndefinedClass>
-      <code><![CDATA[\Qiq\HelperLocator]]></code>
-    </UndefinedClass>
-    <UndefinedDocblockClass>
-      <code><![CDATA[HelperLocatorProvider]]></code>
-    </UndefinedDocblockClass>
   </file>
   <file src="src/QiqErrorHandler.php">
     <RedundantCast>
@@ -50,53 +69,6 @@
       <code><![CDATA[QiqErrorPageRenderer]]></code>
     </ClassMustBeFinal>
   </file>
-  <file src="src/QiqModule.php">
-    <MixedArgument>
-      <code><![CDATA[Compiler::class]]></code>
-      <code><![CDATA[HelperLocator::class]]></code>
-      <code><![CDATA[TemplateCore::class]]></code>
-      <code><![CDATA[TemplateLocator::class]]></code>
-      <code><![CDATA[TemplateLocator::class]]></code>
-    </MixedArgument>
-    <UndefinedClass>
-      <code><![CDATA[Compiler]]></code>
-      <code><![CDATA[HelperLocator]]></code>
-      <code><![CDATA[TemplateCore]]></code>
-      <code><![CDATA[TemplateLocator]]></code>
-      <code><![CDATA[TemplateLocator]]></code>
-    </UndefinedClass>
-  </file>
-  <file src="src/QiqProdModule.php">
-    <MixedArgument>
-      <code><![CDATA[Compiler::class]]></code>
-    </MixedArgument>
-    <UndefinedClass>
-      <code><![CDATA[Compiler]]></code>
-    </UndefinedClass>
-  </file>
-  <file src="src/QiqRenderer.php">
-    <InvalidClone>
-      <code><![CDATA[clone $this->template]]></code>
-    </InvalidClone>
-    <InvalidFunctionCall>
-      <code><![CDATA[($template)()]]></code>
-    </InvalidFunctionCall>
-    <MixedArgument>
-      <code><![CDATA[$template]]></code>
-    </MixedArgument>
-    <MixedAssignment>
-      <code><![CDATA[$ro->view]]></code>
-      <code><![CDATA[$template]]></code>
-    </MixedAssignment>
-    <MixedReturnStatement>
-      <code><![CDATA[$ro->view]]></code>
-    </MixedReturnStatement>
-    <UndefinedClass>
-      <code><![CDATA[$template]]></code>
-      <code><![CDATA[TemplateCore]]></code>
-      <code><![CDATA[private]]></code>
-    </UndefinedClass>
-  </file>
   <file src="src/StubGen.php">
     <MissingTemplateParam>
       <code><![CDATA[class ($iterator) extends SplHeap]]></code>
@@ -105,11 +77,5 @@
       <code><![CDATA[$a]]></code>
       <code><![CDATA[$b]]></code>
     </ParamNameMismatch>
-    <UndefinedDocblockClass>
-      <code><![CDATA[$class]]></code>
-      <code><![CDATA[$class]]></code>
-      <code><![CDATA[ReflectionClass<Helper>]]></code>
-      <code><![CDATA[ReflectionClass<Helper>]]></code>
-    </UndefinedDocblockClass>
   </file>
 </files>
