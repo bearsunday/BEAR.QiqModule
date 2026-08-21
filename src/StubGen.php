@@ -31,11 +31,11 @@ final class StubGen
     private function docMethod(ReflectionClass $class): string
     {
         $method = new ReflectionMethod($class->getName(), '__invoke');
-        $returnType = (string) ($method->getReturnType() ? $method->getReturnType()->getName() : null);
+        $returnType = (string) $method->getReturnType();
         $params = $method->getParameters();
         $paramSigs = [];
         foreach ($params as $param) {
-            $paramSigs[] = sprintf('%s $%s', (string) ($param->getType() ? $param->getType()->getName() : null), $param->getName());
+            $paramSigs[] = sprintf('%s $%s', (string) $param->getType(), $param->getName());
         }
 
         $paramSig = implode(', ', $paramSigs);
