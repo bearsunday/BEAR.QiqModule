@@ -67,6 +67,16 @@ final class TemplateKey
         return $key;
     }
 
+    /**
+     * The same key for a template addressed by the name Qiq renders: `collection:sub/Name`
+     *
+     * @see self::__invoke() the write side, which derives the key from a source path
+     */
+    public static function ofName(string $name, string $extension): string
+    {
+        return str_replace(':', '/', $name) . $extension;
+    }
+
     /** @return array<string, list<string>> */
     public function roots(): array
     {

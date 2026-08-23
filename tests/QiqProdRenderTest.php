@@ -9,7 +9,7 @@ use BEAR\QiqModule\Exception\TemplateNotCompiledException;
 use BEAR\QiqModule\Resource\FakeRo;
 use BEAR\Sunday\Compile\CompileStepInterface;
 use PHPUnit\Framework\TestCase;
-use Qiq\Compiler;
+use Qiq\Catalog;
 use Ray\Di\Injector;
 
 use function assert;
@@ -18,7 +18,7 @@ use function rename;
 use function sys_get_temp_dir;
 use function uniqid;
 
-class QiqServeCompilerTest extends TestCase
+class QiqProdRenderTest extends TestCase
 {
     private const RENDERED = 'Hello, World. That was Qiq! And this is PHP, World.' . "\n";
 
@@ -26,7 +26,7 @@ class QiqServeCompilerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->baseDir = sys_get_temp_dir() . '/' . uniqid('qiq-serve-', true);
+        $this->baseDir = sys_get_temp_dir() . '/' . uniqid('qiq-prod-render-', true);
         parent::setUp();
     }
 
@@ -44,7 +44,7 @@ class QiqServeCompilerTest extends TestCase
         $this->render($injector);
     }
 
-    public function testTheStepAndTheCompilerMeetInTheSameDirectory(): void
+    public function testTheStepAndTheCatalogMeetInTheSameDirectory(): void
     {
         $injector = $this->prodInjector($this->app('app'));
 
@@ -53,14 +53,14 @@ class QiqServeCompilerTest extends TestCase
         $this->assertSame(self::RENDERED, $this->render($injector));
     }
 
-    public function testClearKeepsArtifacts(): void
+    /** What an archive ships: the artifacts without the templates they were compiled from */
+    public function testRendersWithoutTheSourceTree(): void
     {
-        $injector = $this->prodInjector($this->app('app'));
+        $appDir = $this->app('app');
+        $injector = $this->prodInjector($appDir);
         $this->compile($injector);
-        $compiler = $injector->getInstance(Compiler::class);
-        assert($compiler instanceof Compiler);
 
-        $compiler->clear();
+        FakeTree::delete($appDir . '/var/templates');
 
         $this->assertSame(self::RENDERED, $this->render($injector));
     }
@@ -107,12 +107,12 @@ class QiqServeCompilerTest extends TestCase
     /** @param non-empty-string $appDir */
     private function prodInjector(string $appDir): Injector
     {
-        // the prod module has to be the outer one to take over the Compiler binding
+        // the prod module has to be the outer one to take over the Catalog binding
         $module = new FakeAppMetaModule(
             $appDir,
             new QiqProdModule(new QiqModule($appDir . '/var/templates')),
         );
-        $this->assertInstanceOf(QiqServeCompiler::class, (new Injector($module))->getInstance(Compiler::class));
+        $this->assertInstanceOf(QiqProdCatalog::class, (new Injector($module))->getInstance(Catalog::class));
 
         return new Injector($module);
     }

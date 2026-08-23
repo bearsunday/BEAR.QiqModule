@@ -6,7 +6,9 @@ namespace BEAR\QiqModule;
 
 use BEAR\Sunday\Compile\CompileStepInterface;
 use PHPUnit\Framework\TestCase;
+use Qiq\Catalog;
 use Qiq\Compiler;
+use Qiq\Compiler\NonCompiler;
 use Ray\Di\Injector;
 
 use function assert;
@@ -37,11 +39,19 @@ class QiqProdModuleTest extends TestCase
         parent::tearDown();
     }
 
-    public function testCompilerReadsTheBuiltArtifacts(): void
+    public function testTemplatesAreResolvedByName(): void
+    {
+        $catalog = $this->injector->getInstance(Catalog::class);
+
+        $this->assertInstanceOf(QiqProdCatalog::class, $catalog);
+    }
+
+    /** Nothing compiles at serve time, and a compiler that could write has no place in the graph */
+    public function testNothingCompiles(): void
     {
         $compiler = $this->injector->getInstance(Compiler::class);
 
-        $this->assertInstanceOf(QiqServeCompiler::class, $compiler);
+        $this->assertInstanceOf(NonCompiler::class, $compiler);
     }
 
     public function testCompileStepIsBoundToItsName(): void

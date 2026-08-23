@@ -10,9 +10,10 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- BREAKING: `QiqProdModule` binds a read-only `Compiler`, so prod raises `TemplateNotCompiledException` until the compile step has run
+- BREAKING: `QiqProdModule` binds a read-only `Catalog`, so prod raises `TemplateNotCompiledException` until the compile step has run
 - BREAKING: require PHP 8.2+ (from PHP 8.1), the floor of the `bear/sunday` that carries `CompileStepInterface`
 - BREAKING: `QiqProdModule::__construct()` takes no cache path; the read side takes `AbstractAppMeta::$buildDir`
+- BREAKING: `QiqProdCatalog` resolves a template by name under `{buildDir}/qiq`, so prod ships no template tree and works inside a phar
 - `QiqErrorPageRenderer` renders with the injected `Template` instead of `Template::new()`
 
 ### Migration Guide
@@ -35,10 +36,6 @@ while the container is built, so the application stops answering at boot instead
 single template.
 
 The argument-less form needs the `bear/package` release that runs compile steps.
-Templates inside a phar stay unsupported: `Qiq\Catalog` reads the `phar:` scheme of a
-template root as a collection name, so it never resolves one. A compiled DI script
-carries the `appDir` of the machine that built it, so the build directory resolves
-only where the application directory is the one the compile saw.
 
 ## [2.0.0] - 2024-12-28
 
