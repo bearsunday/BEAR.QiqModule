@@ -26,8 +26,9 @@ class QiqProdCatalogTest extends TestCase
         $appDir = $this->baseDir . '/app';
         $meta = new FakeAppMeta($appDir);
         $this->compiledDir = $meta->buildDir . '/' . QiqCompileStep::NAME;
+        mkdir($this->compiledDir . '/__DEFAULT__', 0777, true);
         mkdir($this->compiledDir . '/theme/SubDirectory', 0777, true);
-        file_put_contents($this->compiledDir . '/FakeRo.php', 'compiled');
+        file_put_contents($this->compiledDir . '/__DEFAULT__/FakeRo.php', 'compiled');
         file_put_contents($this->compiledDir . '/theme/SubDirectory/FakeSub.php', 'themed');
         $this->catalog = new QiqProdCatalog($meta, new NonCompiler(), '.php');
         parent::setUp();
@@ -41,7 +42,7 @@ class QiqProdCatalogTest extends TestCase
 
     public function testResolvesByName(): void
     {
-        $this->assertSame($this->compiledDir . '/FakeRo.php', $this->catalog->getCompiled('FakeRo'));
+        $this->assertSame($this->compiledDir . '/__DEFAULT__/FakeRo.php', $this->catalog->getCompiled('FakeRo'));
     }
 
     public function testCollectionIsASubDirectory(): void

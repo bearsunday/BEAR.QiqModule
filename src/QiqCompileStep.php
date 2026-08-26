@@ -8,6 +8,7 @@ use BEAR\Sunday\Compile\CompileStepInterface;
 use Qiq\Catalog;
 use Ray\Di\Di\Named;
 
+use function array_unique;
 use function count;
 use function is_dir;
 
@@ -31,7 +32,8 @@ final class QiqCompileStep implements CompileStepInterface
         $compiler->clear();
         $catalog = new Catalog($this->specs($key), $this->extension, $compiler);
 
-        return count($catalog->compileAll());
+        // first-root-wins duplicates return the same artifact path, so count distinct artifacts
+        return count(array_unique($catalog->compileAll()));
     }
 
     /**

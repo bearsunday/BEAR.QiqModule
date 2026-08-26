@@ -13,21 +13,21 @@ class TemplateKeyTest extends TestCase
     {
         $key = new TemplateKey(['/app/var/templates']);
 
-        $this->assertSame('Page/Index.php', $key('/app/var/templates/Page/Index.php'));
+        $this->assertSame('__DEFAULT__/Page/Index.php', $key('/app/var/templates/Page/Index.php'));
     }
 
     public function testTrailingSlashInRoot(): void
     {
         $key = new TemplateKey(['/app/var/templates/']);
 
-        $this->assertSame('Index.php', $key('/app/var/templates/Index.php'));
+        $this->assertSame('__DEFAULT__/Index.php', $key('/app/var/templates/Index.php'));
     }
 
-    public function testDefaultCollectionIsNotInTheKey(): void
+    public function testCollectionNamespacesTheKey(): void
     {
         $key = new TemplateKey(['/app/a', 'admin:/app/b']);
 
-        $this->assertSame('x.php', $key('/app/a/x.php'));
+        $this->assertSame('__DEFAULT__/x.php', $key('/app/a/x.php'));
         $this->assertSame('admin/x.php', $key('/app/b/x.php'));
     }
 
@@ -36,20 +36,24 @@ class TemplateKeyTest extends TestCase
         $outerFirst = new TemplateKey(['/app/a', '/app/a/deep']);
         $innerFirst = new TemplateKey(['/app/a/deep', '/app/a']);
 
-        $this->assertSame('x.php', $outerFirst('/app/a/deep/x.php'));
-        $this->assertSame('x.php', $innerFirst('/app/a/deep/x.php'));
+        $this->assertSame('__DEFAULT__/x.php', $outerFirst('/app/a/deep/x.php'));
+        $this->assertSame('__DEFAULT__/x.php', $innerFirst('/app/a/deep/x.php'));
     }
 
-    /**
-     * Accepted collision: a collection name and a directory under the default root share one key.
-     * The build keeps whichever it compiles first, so the loser renders the winner's output.
-     */
-    public function testCollectionNameCollidesWithADirectory(): void
+    public function testCollectionNameDoesNotCollideWithADirectory(): void
     {
         $key = new TemplateKey(['/app/t', 'parts:/app/x']);
 
-        $this->assertSame('parts/nav.php', $key('/app/t/parts/nav.php'));
+        $this->assertSame('__DEFAULT__/parts/nav.php', $key('/app/t/parts/nav.php'));
         $this->assertSame('parts/nav.php', $key('/app/x/nav.php'));
+    }
+
+    public function testNameAndPathAgreeOnTheKey(): void
+    {
+        $key = new TemplateKey(['/app/t', 'parts:/app/x']);
+
+        $this->assertSame($key('/app/t/nav.php'), TemplateKey::ofName('nav', '.php'));
+        $this->assertSame($key('/app/x/nav.php'), TemplateKey::ofName('parts:nav', '.php'));
     }
 
     public function testRelocatedTreeKeepsTheKey(): void
@@ -67,7 +71,7 @@ class TemplateKeyTest extends TestCase
     {
         $key = new TemplateKey(['/no/such/directory']);
 
-        $this->assertSame('x.php', $key('/no/such/directory/x.php'));
+        $this->assertSame('__DEFAULT__/x.php', $key('/no/such/directory/x.php'));
     }
 
     public function testSourceOutsideEveryRoot(): void

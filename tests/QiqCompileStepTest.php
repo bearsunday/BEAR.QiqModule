@@ -47,9 +47,9 @@ class QiqCompileStepTest extends TestCase
         $count = $step($this->stepDir);
 
         $this->assertSame(self::TEMPLATE_COUNT, $count);
-        $this->assertFileExists($this->stepDir . '/FakeRo.php');
-        $this->assertFileExists($this->stepDir . '/SubDirectory/FakeSub.php');
-        $this->assertStringContainsString('$this->h($name)', (string) file_get_contents($this->stepDir . '/FakeRo.php'));
+        $this->assertFileExists($this->stepDir . '/__DEFAULT__/FakeRo.php');
+        $this->assertFileExists($this->stepDir . '/__DEFAULT__/SubDirectory/FakeSub.php');
+        $this->assertStringContainsString('$this->h($name)', (string) file_get_contents($this->stepDir . '/__DEFAULT__/FakeRo.php'));
     }
 
     public function testMissingRootIsNotAnError(): void
@@ -70,9 +70,10 @@ class QiqCompileStepTest extends TestCase
     {
         $step = new QiqCompileStep($this->twoRootsSharingATemplate(), '.php');
 
-        $step($this->stepDir);
+        $count = $step($this->stepDir);
 
-        $this->assertSame('first', file_get_contents($this->stepDir . '/Dup.php'));
+        $this->assertSame(1, $count);
+        $this->assertSame('first', file_get_contents($this->stepDir . '/__DEFAULT__/Dup.php'));
     }
 
     public function testStaleArtifactsAreRemoved(): void

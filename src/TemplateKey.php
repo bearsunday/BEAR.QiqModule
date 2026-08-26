@@ -17,9 +17,11 @@ use const DIRECTORY_SEPARATOR;
 use const PHP_OS_FAMILY;
 
 /**
- * Cache key of a template: its path relative to the `qiq_paths` root it lives under
+ * Cache key of a template: `{collection}/{path relative to the root it lives under}`
  *
  * Keys have to survive relocation of the tree, so no absolute path may enter them.
+ * The default collection keeps its `__DEFAULT__` name in the key, so a directory named
+ * like a collection under the default root cannot shadow that collection's templates.
  */
 final class TemplateKey
 {
@@ -54,9 +56,7 @@ final class TemplateKey
                 }
 
                 $matched = $length;
-                $key = $collection === self::DEFAULT_COLLECTION
-                    ? substr($path, $length)
-                    : $collection . '/' . substr($path, $length);
+                $key = $collection . '/' . substr($path, $length);
             }
         }
 
@@ -74,7 +74,9 @@ final class TemplateKey
      */
     public static function ofName(string $name, string $extension): string
     {
-        return str_replace(':', '/', $name) . $extension;
+        [$collection, $path] = self::split($name);
+
+        return $collection . '/' . $path . $extension;
     }
 
     /** @return array<string, list<string>> */
@@ -88,7 +90,7 @@ final class TemplateKey
      *
      * @see \Qiq\Catalog::split() protected, and injecting the Catalog would loop through Compiler
      */
-    private function split(string $spec): array
+    private static function split(string $spec): array
     {
         $offset = PHP_OS_FAMILY === 'Windows' ? 2 : 0;
         $pos = strpos($spec, ':', $offset);
