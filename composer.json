@@ -13,7 +13,10 @@
         "qiq/qiq": "^3.0",
         "bear/resource": "^1.16",
         "bear/sunday": "^1.9",
-        "bear/app-meta": "^1.13"
+        "bear/app-meta": "^1.13",
+        "ray/di": "^2.17",
+        "ray/aop": "^2.17",
+        "psr/log": "^3.0"
     },
     "conflict": {
         "bear/package": "<1.24"
