@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BEAR\QiqModule;
 
+use BEAR\QiqModule\Exception\DoubleDotsNotAllowedException;
 use BEAR\QiqModule\Exception\TemplateOutsideRootException;
 use PHPUnit\Framework\TestCase;
 
@@ -54,6 +55,26 @@ class TemplateKeyTest extends TestCase
 
         $this->assertSame($key('/app/t/nav.php'), TemplateKey::ofName('nav', '.php'));
         $this->assertSame($key('/app/x/nav.php'), TemplateKey::ofName('parts:nav', '.php'));
+    }
+
+    public function testCollectionNameWithASlashDoesNotCollide(): void
+    {
+        $key = new TemplateKey(['my/collection:/app/r1', 'my:/app/r2']);
+
+        $this->assertNotSame($key('/app/r1/template.php'), $key('/app/r2/collection/template.php'));
+        $this->assertSame($key('/app/r1/template.php'), TemplateKey::ofName('my/collection:template', '.php'));
+    }
+
+    public function testDoubleDotsInAName(): void
+    {
+        $this->expectException(DoubleDotsNotAllowedException::class);
+        TemplateKey::ofName('../secret', '.php');
+    }
+
+    public function testDoubleDotsInASpec(): void
+    {
+        $this->expectException(DoubleDotsNotAllowedException::class);
+        new TemplateKey(['/app/../templates']);
     }
 
     public function testRelocatedTreeKeepsTheKey(): void

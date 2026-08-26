@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace BEAR\QiqModule;
 
+use BEAR\QiqModule\Exception\DoubleDotsNotAllowedException;
 use BEAR\QiqModule\Exception\TemplateOutsideRootException;
 
+use function rawurlencode;
 use function rtrim;
+use function str_contains;
 use function str_replace;
 use function str_starts_with;
 use function strlen;
@@ -20,8 +23,9 @@ use const PHP_OS_FAMILY;
  * Cache key of a template: `{collection}/{path relative to the root it lives under}`
  *
  * Keys have to survive relocation of the tree, so no absolute path may enter them.
- * The default collection keeps its `__DEFAULT__` name in the key, so a directory named
- * like a collection under the default root cannot shadow that collection's templates.
+ * The default collection keeps its `__DEFAULT__` name in the key, and the collection
+ * segment is rawurlencoded, so no two `(collection, path)` pairs share a key: neither
+ * a directory named like a collection nor a collection name containing `/` collides.
  */
 final class TemplateKey
 {
@@ -56,7 +60,7 @@ final class TemplateKey
                 }
 
                 $matched = $length;
-                $key = $collection . '/' . substr($path, $length);
+                $key = rawurlencode($collection) . '/' . substr($path, $length);
             }
         }
 
@@ -76,7 +80,7 @@ final class TemplateKey
     {
         [$collection, $path] = self::split($name);
 
-        return $collection . '/' . $path . $extension;
+        return rawurlencode($collection) . '/' . $path . $extension;
     }
 
     /** @return array<string, list<string>> */
@@ -88,10 +92,16 @@ final class TemplateKey
     /**
      * @return array{string, string}
      *
+     * @throws DoubleDotsNotAllowedException
+     *
      * @see \Qiq\Catalog::split() protected, and injecting the Catalog would loop through Compiler
      */
     private static function split(string $spec): array
     {
+        if (str_contains($spec, '..')) {
+            throw new DoubleDotsNotAllowedException($spec);
+        }
+
         $offset = PHP_OS_FAMILY === 'Windows' ? 2 : 0;
         $pos = strpos($spec, ':', $offset);
         if ($pos === false || $pos === 0) {
