@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - `QiqErrorPage` receives the `error_page` renderer: the qualifier moved to the parameter, where Ray.Di 2.23 reads it
+- The distribution ships the `var/qiq` skeleton the manual tells users to copy, and no longer ships `demo/`
 
 ## [2.1.0] - 2026-08-27
 
