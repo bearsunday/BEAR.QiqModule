@@ -110,7 +110,7 @@ class QiqProdRenderTest extends TestCase
         // the prod module has to be the outer one to take over the Catalog binding
         $module = new FakeAppMetaModule(
             $appDir,
-            new QiqProdModule(new QiqModule($appDir . '/var/templates')),
+            new QiqProdModule(module: new QiqModule($appDir . '/var/templates')),
         );
         $this->assertInstanceOf(QiqProdCatalog::class, (new Injector($module))->getInstance(Catalog::class));
 
