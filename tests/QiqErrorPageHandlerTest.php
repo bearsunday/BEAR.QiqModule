@@ -6,10 +6,12 @@ namespace BEAR\QiqModule;
 
 use BEAR\Resource\Exception\ResourceNotFoundException as NotFound;
 use BEAR\Resource\Exception\ServerErrorException as ServerError;
+use BEAR\Resource\RenderInterface;
 use BEAR\Sunday\Extension\Error\ErrorInterface;
 use BEAR\Sunday\Extension\Router\RouterMatch;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Ray\Di\Injector;
 
 use function dirname;
 use function serialize;
@@ -26,9 +28,10 @@ class QiqErrorPageHandlerTest extends TestCase
         $qiqErrorViewName = 'Error';
 
         $this->qiqErrorModule = new QiqErrorModule($qiqErrorViewName);
+        $module = new QiqModule($qiqTemplateDir, $this->qiqErrorModule);
 
         $errorPage = new QiqErrorPage();
-        $errorPage->setRenderer(new QiqErrorPageRenderer($qiqTemplateDir, $qiqErrorViewName));
+        $errorPage->setRenderer((new Injector($module))->getInstance(RenderInterface::class, 'error_page'));
 
         $this->handler = new QiqErrorHandler(
             $errorPage,

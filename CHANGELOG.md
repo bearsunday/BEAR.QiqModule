@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- `QiqCompileStep` compiles every template into `{buildDir}/qiq` during the build, so a read-only tree can serve
+
+### Changed
+
+- BREAKING: `QiqProdModule` binds a read-only `Catalog`, so prod raises `TemplateNotCompiledException` until the compile step has run
+- BREAKING: require PHP 8.2+ (from PHP 8.1), the floor of the `bear/sunday` that carries `CompileStepInterface`
+- BREAKING: `QiqProdModule::__construct()` takes no cache path; the read side takes `AbstractAppMeta::$buildDir`
+- BREAKING: `QiqProdCatalog` resolves a template by name under `{buildDir}/qiq`, so prod ships no template tree and works inside a phar
+- `QiqErrorPageRenderer` renders with the injected `Template` instead of `Template::new()`
+
+### Migration Guide
+
+Existing prod modules keep resolving, but nothing compiles their templates any more.
+Compile the application before serving it, and drop the cache path so the read side
+looks where the step wrote:
+
+```php
+// Before
+$this->install(new QiqProdModule($this->appMeta->appDir . '/var/tmp/cache/qiq'));
+
+// After: templates are read from the build directory the compile step filled
+$this->install(new QiqProdModule());
+```
+
+Delete the existing `var/build` and compile again rather than compiling on top of it. A `Meta`
+baked into DI scripts from before `bear/app-meta` 1.13 carries no `$buildDir`, and it is read
+while the container is built, so the application stops answering at boot instead of losing a
+single template.
+
+The argument-less form needs the `bear/package` release that runs compile steps.
+
 ## [2.0.0] - 2024-12-28
 
 ### Changed
