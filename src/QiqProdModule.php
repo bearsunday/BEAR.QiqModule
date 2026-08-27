@@ -26,7 +26,7 @@ final class QiqProdModule extends AbstractModule
     public function __construct(private string|null $cachePath = null, AbstractModule|null $module = null)
     {
         if ($this->cachePath !== null) {
-            trigger_error('QiqProdModule($cachePath) is deprecated; install QiqProdModule() and compile ahead of serving.', E_USER_DEPRECATED);
+            trigger_error('QiqProdModule($cachePath) is deprecated; install QiqProdModule() and compile ahead of serving. See https://bearsunday.github.io/manuals/1.0/en/html-qiq.html', E_USER_DEPRECATED);
         }
 
         parent::__construct($module);
