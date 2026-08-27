@@ -26,7 +26,7 @@ class QiqProdModuleTest extends TestCase
 
     protected function setUp(): void
     {
-        $module = new FakeAppMetaModule('/path/to/app', new QiqProdModule(new QiqModule('/no/such/templates')));
+        $module = new FakeAppMetaModule('/path/to/app', new QiqProdModule(module: new QiqModule('/no/such/templates')));
         $this->injector = new Injector($module);
         $this->stepDir = sys_get_temp_dir() . '/' . uniqid('qiq-prod-', true);
         mkdir($this->stepDir, 0777, true);

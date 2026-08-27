@@ -10,17 +10,19 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-- BREAKING: `QiqProdModule` binds a read-only `Catalog`, so prod raises `TemplateNotCompiledException` until the compile step has run
-- BREAKING: require PHP 8.2+ (from PHP 8.1), the floor of the `bear/sunday` that carries `CompileStepInterface`
-- BREAKING: `QiqProdModule::__construct()` takes no cache path; the read side takes `AbstractAppMeta::$buildDir`
-- BREAKING: `QiqProdCatalog` resolves a template by name under `{buildDir}/qiq`, so prod ships no template tree and works inside a phar
+- `QiqProdModule()` without a cache path binds a read-only `Catalog` reading `{buildDir}/qiq`, so prod ships no template tree, works inside a phar, and raises `TemplateNotCompiledException` until the compile step has run
+- Require PHP 8.2+ (from PHP 8.1), the floor of the `bear/sunday` that carries `CompileStepInterface`
 - `QiqErrorPageRenderer` renders with the injected `Template` instead of `Template::new()`
+
+### Deprecated
+
+- `QiqProdModule($cachePath)` keeps compiling at serve time into the path, unchanged; the parameter goes away in 3.0
 
 ### Migration Guide
 
-Existing prod modules keep resolving, but nothing compiles their templates any more.
-Compile the application before serving it, and drop the cache path so the read side
-looks where the step wrote:
+Existing prod modules keep working as before, with a deprecation notice. To serve the
+compiled build instead, compile the application before serving it and drop the cache
+path so the read side looks where the step wrote:
 
 ```php
 // Before
