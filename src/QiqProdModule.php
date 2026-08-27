@@ -18,10 +18,8 @@ use function trigger_error;
 use const E_USER_DEPRECATED;
 
 /**
- * Without a path, templates are compiled ahead into {buildDir}/qiq by the compile step and
- * served read-only; serving before compiling raises TemplateNotCompiledException.
- * With a path, templates compile at serve time into it, as before 2.1 — deprecated,
- * and the parameter goes away in 3.0.
+ * Serves the templates the compile step wrote into {buildDir}/qiq.
+ * A $cachePath compiles at serve time instead — deprecated.
  */
 final class QiqProdModule extends AbstractModule
 {
