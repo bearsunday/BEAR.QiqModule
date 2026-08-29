@@ -54,7 +54,6 @@ class QiqErrorPageHandlerTest extends TestCase
         return $handler;
     }
 
-    /** @depends testHandle */
     public function testTransfer(): void
     {
         $request = new RouterMatch();
