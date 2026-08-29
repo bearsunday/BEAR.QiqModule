@@ -1,15 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.19.0@a2ad69ae4f5ab1f7d225a8dc4e2ec2d9415ed599">
-  <file src="src/QiqErrorPageRenderer.php">
-    <InvalidAttribute occurrences="2">
-      <code>Named</code>
-      <code>Named</code>
-    </InvalidAttribute>
+<files psalm-version="6.16.1@f1f5de594dc76faf8784e02d3dc4716c91c6f6ac">
+  <file src="src/Exception/LogicException.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[LogicException]]></code>
+    </ClassMustBeFinal>
   </file>
-  <file src="src/QiqRenderer.php">
-    <InvalidAttribute occurrences="2">
-      <code>Named</code>
-      <code>Named</code>
-    </InvalidAttribute>
+  <file src="src/Exception/RuntimeException.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[RuntimeException]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/HelperLocator.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[HelperLocator]]></code>
+    </ClassMustBeFinal>
+    <InvalidPropertyAssignmentValue>
+      <code><![CDATA[$this->instances]]></code>
+    </InvalidPropertyAssignmentValue>
+    <MissingClosureReturnType>
+      <code><![CDATA[fn () => new $maybeHelper($this->escape)]]></code>
+    </MissingClosureReturnType>
+    <MixedAssignment>
+      <code><![CDATA[$factory]]></code>
+    </MixedAssignment>
+    <MixedFunctionCall>
+      <code><![CDATA[$factory()]]></code>
+      <code><![CDATA[$this->get($name)(...$args)]]></code>
+    </MixedFunctionCall>
+    <MixedMethodCall>
+      <code><![CDATA[new $maybeHelper($this->escape)]]></code>
+    </MixedMethodCall>
+    <MixedPropertyTypeCoercion>
+      <code><![CDATA[$this->instances]]></code>
+    </MixedPropertyTypeCoercion>
+    <NonInvariantDocblockPropertyType>
+      <code><![CDATA[$instances]]></code>
+    </NonInvariantDocblockPropertyType>
+    <UnsafeInstantiation>
+      <code><![CDATA[new static(array_merge([
+            'a'      => static fn () => new Helper\EscapeAttr($escape),
+            'c'      => static fn () => new Helper\EscapeCss($escape),
+            'escape' => static fn () => $escape,
+            'h'      => static fn () => new Helper\EscapeHtml($escape),
+            'u'      => static fn () => new Helper\EscapeUrl($escape),
+        ], $factories), $escape)]]></code>
+    </UnsafeInstantiation>
+  </file>
+  <file src="src/HelperLocatorProvider.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[HelperLocatorProvider]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/QiqErrorHandler.php">
+    <RedundantCast>
+      <code><![CDATA[(int) $e->getCode()]]></code>
+    </RedundantCast>
+  </file>
+  <file src="src/QiqErrorPage.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[QiqErrorPage]]></code>
+    </ClassMustBeFinal>
+    <NonInvariantDocblockPropertyType>
+      <code><![CDATA[$headers]]></code>
+    </NonInvariantDocblockPropertyType>
+  </file>
+  <file src="src/QiqErrorPageRenderer.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[QiqErrorPageRenderer]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="src/StubGen.php">
+    <MissingTemplateParam>
+      <code><![CDATA[class ($iterator) extends SplHeap]]></code>
+    </MissingTemplateParam>
+    <ParamNameMismatch>
+      <code><![CDATA[$a]]></code>
+      <code><![CDATA[$b]]></code>
+    </ParamNameMismatch>
   </file>
 </files>
