@@ -74,4 +74,27 @@ class QiqErrorPageHandlerTest extends TestCase
         $errorPage = unserialize(serialize(new QiqErrorPage()));
         $this->assertInstanceOf(QiqErrorPage::class, $errorPage);
     }
+
+    /** The page must get the 'error_page' renderer from DI, not the default RenderInterface binding */
+    public function testInjectedErrorPageRendersThroughTheErrorPageRenderer(): void
+    {
+        $injector = new Injector(
+            new QiqModule(dirname(__DIR__) . '/tests/Fake/templates', new QiqErrorModule('Error')),
+            dirname(__DIR__) . '/tests/tmp',
+        );
+        $handler = new QiqErrorHandler(
+            $injector->getInstance(QiqErrorPage::class),
+            new FakeHttpResponder(),
+            new NullLogger(),
+        );
+
+        $request = new RouterMatch();
+        $request->method = 'get';
+        $request->path = '/';
+        $request->query = [];
+        FakeHttpResponder::reset();
+        $handler->handle(new ServerError(), $request)->transfer();
+
+        $this->assertStringStartsWith('code: 503 message: Service Unavailable', (string) FakeHttpResponder::$content);
+    }
 }
