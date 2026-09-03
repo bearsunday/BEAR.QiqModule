@@ -18,9 +18,9 @@ use function rtrim;
 
 final class QiqBuildCompiler extends QiqCompiler
 {
-    private string $compiledDir;
+    private readonly string $compiledDir;
 
-    public function __construct(string $compiledDir, private TemplateKey $key)
+    public function __construct(string $compiledDir, private readonly TemplateKey $key)
     {
         $this->compiledDir = rtrim($compiledDir, '/');
         parent::__construct($this->compiledDir);
