@@ -15,8 +15,9 @@ use function is_array;
 final class QiqErrorPageRenderer implements RenderInterface
 {
     public function __construct(
-        private Template $template,
-        #[Named('qiq_error_view_name')] private string|null $errorViewName = null,
+        private readonly Template $template,
+        #[Named('qiq_error_view_name')]
+        private readonly string|null $errorViewName = null,
     ) {
     }
 

@@ -19,8 +19,10 @@ final class QiqCompileStep implements CompileStepInterface
 
     /** @param list<string> $paths */
     public function __construct(
-        #[Named('qiq_paths')] private array $paths,
-        #[Named('qiq_extension')] private string $extension,
+        #[Named('qiq_paths')]
+        private readonly array $paths,
+        #[Named('qiq_extension')]
+        private readonly string $extension,
     ) {
     }
 

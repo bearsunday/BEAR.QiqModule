@@ -19,9 +19,9 @@ use function sprintf;
 final class QiqErrorHandler implements ErrorInterface
 {
     public function __construct(
-        private QiqErrorPage $errorPage,
-        private TransferInterface $transfer,
-        private LoggerInterface $logger,
+        private readonly QiqErrorPage $errorPage,
+        private readonly TransferInterface $transfer,
+        private readonly LoggerInterface $logger,
     ) {
     }
 

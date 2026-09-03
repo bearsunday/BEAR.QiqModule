@@ -18,8 +18,8 @@ use Ray\Di\Scope;
 final class QiqModule extends AbstractModule
 {
     public function __construct(
-        private string $templateDir,
-        private AbstractModule|null $module = null,
+        private readonly string $templateDir,
+        private readonly AbstractModule|null $module = null,
     ) {
         parent::__construct($this->module);
     }

@@ -39,7 +39,7 @@ final class TemplateKey
     public function __construct(array $paths)
     {
         foreach ($paths as $spec) {
-            [$collection, $path] = $this->split($spec);
+            [$collection, $path] = self::split($spec);
             $this->roots[$collection][] = $this->fixPath($path);
         }
     }
