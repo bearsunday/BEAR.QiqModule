@@ -17,13 +17,7 @@ final class QiqCompileStep implements CompileStepInterface
     /** Binding key of this step, and the sub directory of the build directory it owns */
     public const NAME = 'qiq';
 
-    /**
-     * The defaults stand where QiqProdModule is installed without QiqModule: nothing to compile.
-     *
-     * @param list<string> $paths
-     *
-     * @see QiqProdModule
-     */
+    /** @param list<string> $paths */
     public function __construct(
         #[Named('qiq_paths')]
         private readonly array $paths = [],
@@ -35,7 +29,7 @@ final class QiqCompileStep implements CompileStepInterface
     public function __invoke(string $stepDir): int
     {
         if ($this->paths === []) {
-            return 0; // no QiqModule in this tree
+            return 0;
         }
 
         $key = new TemplateKey($this->paths);
