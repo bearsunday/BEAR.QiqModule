@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- A compile no longer fails with `Unbound qiq_paths` where `QiqProdModule` is installed and `QiqModule` is not, as in `prod-cli-hal-app`: the compile step has no templates and answers 0
+
 ## [2.1.1] - 2026-09-03
 
 ### Fixed
