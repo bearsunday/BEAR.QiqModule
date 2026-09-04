@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- `QiqProdModule` installs in a prod context that has no `QiqModule`, such as `prod-cli-hal-app`: the compile step has no templates and answers 0, where it failed the compile with `Unbound qiq_paths` (`ProdModule` installs it for every context)
+
 ## [2.1.1] - 2026-09-03
 
 ### Fixed

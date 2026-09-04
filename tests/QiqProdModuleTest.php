@@ -67,9 +67,23 @@ class QiqProdModuleTest extends TestCase
         $this->assertSame(0, $step($this->stepDir));
     }
 
+    /** ProdModule installs the module for every context; one without QiqModule, such as prod-cli-hal-app, has nothing to compile */
+    public function testStepWithoutQiqModule(): void
+    {
+        $injector = new Injector(new FakeAppMetaModule('/path/to/app', new QiqProdModule()));
+        $step = $this->stepOf($injector);
+
+        $this->assertSame(0, $step($this->stepDir));
+    }
+
     private function step(): CompileStepInterface
     {
-        $holder = $this->injector->getInstance(FakeCompileSteps::class);
+        return $this->stepOf($this->injector);
+    }
+
+    private function stepOf(Injector $injector): CompileStepInterface
+    {
+        $holder = $injector->getInstance(FakeCompileSteps::class);
         assert($holder instanceof FakeCompileSteps);
         $step = iterator_to_array($holder->steps)[QiqCompileStep::NAME];
         assert($step instanceof CompileStepInterface);

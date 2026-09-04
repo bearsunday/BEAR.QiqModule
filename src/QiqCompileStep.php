@@ -17,17 +17,26 @@ final class QiqCompileStep implements CompileStepInterface
     /** Binding key of this step, and the sub directory of the build directory it owns */
     public const NAME = 'qiq';
 
-    /** @param list<string> $paths */
+    /**
+     * The defaults stand in a prod context that installs no QiqModule, such as prod-cli-hal-app:
+     * ProdModule installs QiqProdModule for every context, and this step then has nothing to compile.
+     *
+     * @param list<string> $paths
+     */
     public function __construct(
         #[Named('qiq_paths')]
-        private readonly array $paths,
+        private readonly array $paths = [],
         #[Named('qiq_extension')]
-        private readonly string $extension,
+        private readonly string $extension = '.php',
     ) {
     }
 
     public function __invoke(string $stepDir): int
     {
+        if ($this->paths === []) {
+            return 0;
+        }
+
         $key = new TemplateKey($this->paths);
         $compiler = new QiqBuildCompiler($stepDir, $key);
         // clean build: "first root wins" needs the leftovers of earlier runs gone
