@@ -18,8 +18,9 @@ final class QiqCompileStep implements CompileStepInterface
     public const NAME = 'qiq';
 
     /**
-     * The defaults stand in a prod context that installs no QiqModule, such as prod-cli-hal-app:
-     * ProdModule installs QiqProdModule for every context, and this step then has nothing to compile.
+     * Resolved at compile, in every tree that installs QiqProdModule. A tree without QiqModule
+     * binds no template path, and the defaults let the step compile nothing instead of failing
+     * the compile with Unbound. prod-cli-hal-app beside prod-html-app is that tree.
      *
      * @param list<string> $paths
      */
@@ -34,7 +35,7 @@ final class QiqCompileStep implements CompileStepInterface
     public function __invoke(string $stepDir): int
     {
         if ($this->paths === []) {
-            return 0;
+            return 0; // no QiqModule in this tree
         }
 
         $key = new TemplateKey($this->paths);
