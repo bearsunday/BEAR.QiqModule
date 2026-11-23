@@ -44,6 +44,7 @@ final class QiqProdModule extends AbstractModule
 
         MultiBinder::newInstance($this, CompileStepInterface::class)
             ->addBinding(QiqCompileStep::NAME)->to(QiqCompileStep::class);
+        $this->bind(QiqCompileStep::class);
         $this->bind(Catalog::class)->to(QiqProdCatalog::class);
         $this->bind(Compiler::class)->to(NonCompiler::class);
     }
