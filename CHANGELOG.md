@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- `QiqProdModule` binds `QiqCompileStep` explicitly, so the module compiles with ray/compiler, which rejects an unbound multibinding target ([ray-di/Ray.Compiler#148](https://github.com/ray-di/Ray.Compiler/issues/148)), and resolves the step without the just-in-time binding Ray.Di 2.24 deprecates
+- `QiqProdModule` binds `QiqCompileStep` explicitly, so an application installing it compiles with ray/compiler that rejects an unbound multibinding target [#50]
 
 ## [2.1.2] - 2026-09-04
 
