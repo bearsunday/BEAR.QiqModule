@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- `QiqProdModule` binds `QiqCompileStep` explicitly, so a compile raises no Ray.Di 2.24 just-in-time binding deprecation and passes a ray/compiler that rejects an unbound multibinding target ([#50](https://github.com/bearsunday/BEAR.QiqModule/pull/50))
+
 ## [2.1.2] - 2026-09-04
 
 ### Fixed
